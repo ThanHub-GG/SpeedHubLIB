@@ -172,7 +172,8 @@ function CircleClick(Button, X, Y)
 	end)
 end
 
-local Speed_Library, Notification = {}, {} Speed_Library.Unloaded = false
+local Speed_Library, Notification = {}, {}
+Speed_Library.Unloaded = false
 function Speed_Library:SetNotification(Config)
     local Title = Config[1] or Config.Title or "Notification"
     local Description = Config[2] or Config.Description or ""
