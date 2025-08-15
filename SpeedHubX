@@ -464,35 +464,37 @@ function Speed_Library:CreateWindow(Config)
     Name = "Top"
   }, Main)
 
-  local TextLabel = Custom:Create("TextLabel", {
+local TextLabel = Custom:Create("TextLabel", {
     Font = Enum.Font.GothamBold,
     Text = Title,
     TextColor3 = Color3.fromRGB(255, 255, 255),
     TextSize = 14,
-    TextXAlignment = Enum.TextXAlignment.Left,
+    TextXAlignment = Enum.TextXAlignment.Center,  -- tengah
+    TextYAlignment = Enum.TextYAlignment.Center,  -- vertikal tengah
     BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-    BackgroundTransparency = 0.9990000128746033,
-    BorderColor3 = Color3.fromRGB(0, 0, 0),
+    BackgroundTransparency = 1,
     BorderSizePixel = 0,
-    Size = UDim2.new(1, -100, 1, 0),
-    Position = UDim2.new(0, 10, 0, 0)
-  }, Top)
+    AnchorPoint = Vector2.new(0.5, 0.5),
+    Position = UDim2.new(0.5, 0, 0.5, -4), -- posisinya di tengah Top
+    Size = UDim2.new(0.5, 0, 1, 0)
+}, Top)
 
   Custom:Create("UICorner", {}, Top)
 
-  local TextLabel1 = Custom:Create("TextLabel", {
+local TextLabel1 = Custom:Create("TextLabel", {
     Font = Enum.Font.GothamBold,
     Text = Description,
     TextColor3 = Custom.ColorRGB,
     TextSize = 14,
-    TextXAlignment = Enum.TextXAlignment.Left,
+    TextXAlignment = Enum.TextXAlignment.Center,  -- tengah
+    TextYAlignment = Enum.TextYAlignment.Center,  -- vertikal tengah
     BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-    BackgroundTransparency = 0.9990000128746033,
-    BorderColor3 = Color3.fromRGB(0, 0, 0),
+    BackgroundTransparency = 1,
     BorderSizePixel = 0,
-    Size = UDim2.new(1, -(TextLabel.TextBounds.X + 104), 1, 0),
-    Position = UDim2.new(0, TextLabel.TextBounds.X + 15, 0, 0)
-  }, Top)
+    AnchorPoint = Vector2.new(0.5, 0.5),
+    Position = UDim2.new(0.5, 0, 0.7, -4), -- sedikit di bawah title
+    Size = UDim2.new(0.5, 0, 1, 0)
+}, Top)
 
   Custom:Create("UIStroke", {
     Color = Custom.ColorRGB,
