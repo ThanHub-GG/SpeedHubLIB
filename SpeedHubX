@@ -490,10 +490,9 @@ local TextLabel1 = Custom:Create("TextLabel", {
     BackgroundTransparency = 1,
     BorderSizePixel = 0,
     AnchorPoint = Vector2.new(0.5, 0.5),
-    Position = UDim2.new(0.5, 0, 0.65, 0), -- lebih bawah dari title
+    Position = UDim2.new(0.5, 0, 0.72, 0), -- turun dikit dari sebelumnya
     Size = UDim2.new(0.5, 0, 0.3, 0)
 }, Top)
-
   Custom:Create("UIStroke", {
     Color = Custom.ColorRGB,
     Thickness = 0.4
