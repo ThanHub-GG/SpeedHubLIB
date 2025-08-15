@@ -167,238 +167,98 @@ function CircleClick(Button, X, Y)
 	end)
 end
 
-local Speed_Library, Notification = {}, {}
-
-Speed_Library.Unloaded = false
-
 function Speed_Library:SetNotification(Config)
-  local Title = Config[1] or Config.Title or ""
-  local Description = Config[2] or Config.Description or ""
-	local Content = Config[3] or Config.Content or ""
-  local Time = Config[5] or Config.Time or 0.5
-  local Delay = Config[6] or Config.Delay or 5
+    local Title = Config[1] or Config.Title or "Notification"
+    local Description = Config[2] or Config.Description or ""
+    local Content = Config[3] or Config.Content or ""
+    local Time = Config[5] or Config.Time or 0.5
+    local Delay = Config[6] or Config.Delay or 4
 
-  local NotificationGui = Custom:Create("ScreenGui", {
-    ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
-    Name = "NotificationGui"
-  }, game:GetService("CoreGui"))
+    local NotificationGui = Instance.new("ScreenGui")
+    NotificationGui.Name = "NotificationGui"
+    NotificationGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    NotificationGui.Parent = game:GetService("CoreGui")
 
-  local NotificationLayout = Custom:Create("Frame", {
-    AnchorPoint = Vector2.new(1, 1),
-    BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-    BackgroundTransparency = 0.999,
-    BorderColor3 = Color3.fromRGB(0, 0, 0),
-    BorderSizePixel = 0,
-    Position = UDim2.new(1, -30, 1, -30),
-    Size = UDim2.new(0, 320, 1, 0),
-    Name = "NotificationLayout"
-  }, NotificationGui)
+    local NotificationFrame = Instance.new("Frame")
+    NotificationFrame.AnchorPoint = Vector2.new(1, 0)
+    NotificationFrame.Position = UDim2.new(1, 400, 0, 50)
+    NotificationFrame.Size = UDim2.new(0, 300, 0, 80)
+    NotificationFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    NotificationFrame.BackgroundTransparency = 0.1
+    NotificationFrame.BorderSizePixel = 0
+    NotificationFrame.Parent = NotificationGui
+    NotificationFrame.ClipsDescendants = true
 
-  local Count = 0
+    local UICorner = Instance.new("UICorner")
+    UICorner.CornerRadius = UDim.new(0, 12)
+    UICorner.Parent = NotificationFrame
 
-  NotificationLayout.ChildRemoved:Connect(function()
-    Count = 0
-    local tweenInfo = TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
-    
-    for _, v in ipairs(NotificationLayout:GetChildren()) do
-      local NewPOS = UDim2.new(0, 0, 1, -((v.Size.Y.Offset + 12) * Count))
-      local tween = TweenService:Create(v, tweenInfo, {Position = NewPOS})
-      tween:Play()
-      Count = Count + 1
+    -- Shadow
+    local DropShadow = Instance.new("ImageLabel")
+    DropShadow.Image = "rbxassetid://6015897843"
+    DropShadow.ScaleType = Enum.ScaleType.Slice
+    DropShadow.SliceCenter = Rect.new(49, 49, 450, 450)
+    DropShadow.ImageColor3 = Color3.fromRGB(0,0,0)
+    DropShadow.ImageTransparency = 0.7
+    DropShadow.BackgroundTransparency = 1
+    DropShadow.Size = UDim2.new(1, 30, 1, 30)
+    DropShadow.Position = UDim2.new(0, -15, 0, -15)
+    DropShadow.Parent = NotificationFrame
+
+    -- Close button
+    local Close = Instance.new("TextButton")
+    Close.Size = UDim2.new(0, 20, 0, 20)
+    Close.Position = UDim2.new(1, -25, 0, 5)
+    Close.BackgroundTransparency = 1
+    Close.Text = "✕"
+    Close.TextColor3 = Color3.fromRGB(200, 200, 200)
+    Close.Font = Enum.Font.GothamBold
+    Close.TextSize = 14
+    Close.Parent = NotificationFrame
+
+    -- Title
+    local TitleLabel = Instance.new("TextLabel")
+    TitleLabel.Text = Title
+    TitleLabel.Font = Enum.Font.GothamBold
+    TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TitleLabel.TextSize = 16
+    TitleLabel.Position = UDim2.new(0, 15, 0, 10)
+    TitleLabel.Size = UDim2.new(1, -40, 0, 20)
+    TitleLabel.BackgroundTransparency = 1
+    TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
+    TitleLabel.Parent = NotificationFrame
+
+    -- Description
+    local DescLabel = Instance.new("TextLabel")
+    DescLabel.Text = Description
+    DescLabel.Font = Enum.Font.Gotham
+    DescLabel.TextColor3 = Color3.fromRGB(180, 180, 180)
+    DescLabel.TextSize = 14
+    DescLabel.Position = UDim2.new(0, 15, 0, 35)
+    DescLabel.Size = UDim2.new(1, -20, 0, 40)
+    DescLabel.BackgroundTransparency = 1
+    DescLabel.TextXAlignment = Enum.TextXAlignment.Left
+    DescLabel.TextWrapped = true
+    DescLabel.Parent = NotificationFrame
+
+    -- Animasi slide in
+    local tweenIn = TweenService:Create(NotificationFrame, TweenInfo.new(Time, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Position = UDim2.new(1, -30, 0, 50)})
+    tweenIn:Play()
+
+    -- Close function
+    local function CloseNotif()
+        local tweenOut = TweenService:Create(NotificationFrame, TweenInfo.new(Time, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {Position = UDim2.new(1, 400, 0, 50)})
+        tweenOut:Play()
+        tweenOut.Completed:Wait()
+        NotificationGui:Destroy()
     end
-  end)
 
-  local _Count = 0
-  for _, v in ipairs(NotificationLayout:GetChildren()) do
-    _Count = -(v.Position.Y.Offset) + v.Size.Y.Offset + 12
-  end
+    Close.Activated:Connect(CloseNotif)
 
-  local NotificationFrame = Custom:Create("Frame", {
-    BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-    BorderColor3 = Color3.fromRGB(0, 0, 0),
-    BorderSizePixel = 0,
-    Size = UDim2.new(1, 0, 0, 150),
-    Name = "NotificationFrame",
-    BackgroundTransparency = 1,
-    AnchorPoint = Vector2.new(0, 1),
-    Position = UDim2.new(0, 0, 1, -(_Count))
-  }, NotificationLayout)
-
-  local NotificationFrameReal = Custom:Create("Frame", {
-    BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-    BorderColor3 = Color3.fromRGB(0, 0, 0),
-    BorderSizePixel = 0,
-    Position = UDim2.new(0, 400, 0, 0),
-    Size = UDim2.new(1, 0, 1, 0),
-    Name = "NotificationFrameReal"
-  }, NotificationFrame)
-
-  Custom:Create("UICorner", {
-    CornerRadius = UDim.new(0, 8)
-  }, NotificationFrameReal)
-
-  local DropShadowHolder = Custom:Create("Frame", {
-    BackgroundTransparency = 1,
-    BorderSizePixel = 0,
-    Size = UDim2.new(1, 0, 1, 0),
-    ZIndex = 0,
-    Name = "DropShadowHolder",
-    Parent = NotificationFrameReal
-  })
-
-  local DropShadow = Custom:Create("ImageLabel", {
-    Image = "rbxassetid://6015897843",
-    ImageColor3 = Color3.fromRGB(0, 0, 0),
-    ImageTransparency = 0.5,
-    ScaleType = Enum.ScaleType.Slice,
-    SliceCenter = Rect.new(49, 49, 450, 450),
-    AnchorPoint = Vector2.new(0.5, 0.5),
-    BackgroundTransparency = 1,
-    BorderSizePixel = 0,
-    Position = UDim2.new(0.5, 0, 0.5, 0),
-    Size = UDim2.new(1, 47, 1, 47),
-    ZIndex = 0,
-    Name = "DropShadow",
-    Parent = DropShadowHolder
-  })
- 
-  local Top = Custom:Create("Frame", {
-    BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-    BackgroundTransparency = 0.999,
-    BorderColor3 = Color3.fromRGB(0, 0, 0),
-    BorderSizePixel = 0,
-    Size = UDim2.new(1, 0, 0, 36),
-    Name = "Top",
-    Parent = NotificationFrameReal
-  })
-
-  local TextLabel = Custom:Create("TextLabel", {
-    Font = Enum.Font.GothamBold,
-    Text = Title,
-    TextColor3 = Color3.fromRGB(255, 255, 255),
-    TextSize = 14,
-    TextXAlignment = Enum.TextXAlignment.Left,
-    BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-    BackgroundTransparency = 0.999,
-    BorderColor3 = Color3.fromRGB(0, 0, 0),
-    BorderSizePixel = 0,
-    Size = UDim2.new(1, 0, 1, 0),
-    Position = UDim2.new(0, 10, 0, 0),
-    Parent = Top
-  })
-
-  Custom:Create("UIStroke", {
-    Color = Color3.fromRGB(255, 255, 255),
-    Thickness = 0.3,
-    Parent = TextLabel
-  })
-
-  Custom:Create("UICorner", {
-    Parent = Top,
-    CornerRadius = UDim.new(0, 5)
-  })
-
-  local TextLabel1 = Custom:Create("TextLabel", {
-    Font = Enum.Font.GothamBold,
-    Text = Description,
-    TextColor3 = Custom.ColorRGB,
-    TextSize = 14,
-    TextXAlignment = Enum.TextXAlignment.Left,
-    BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-    BackgroundTransparency = 0.999,
-    BorderColor3 = Color3.fromRGB(0, 0, 0),
-    BorderSizePixel = 0,
-    Size = UDim2.new(1, 0, 1, 0),
-    Position = UDim2.new(0, TextLabel.TextBounds.X + 15, 0, 0),
-    Parent = Top
-  })
-
-  Custom:Create("UIStroke", {
-    Color = Custom.ColorRGB,
-    Thickness = 0.4,
-    Parent = TextLabel1
-  })
-
-  local Close = Custom:Create("TextButton", {
-    Font = Enum.Font.SourceSans,
-    Text = "",
-    TextColor3 = Color3.fromRGB(0, 0, 0),
-    TextSize = 14,
-    AnchorPoint = Vector2.new(1, 0.5),
-    BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-    BackgroundTransparency = 0.999,
-    BorderColor3 = Color3.fromRGB(0, 0, 0),
-    BorderSizePixel = 0,
-    Position = UDim2.new(1, -5, 0.5, 0),
-    Size = UDim2.new(0, 25, 0, 25),
-    Name = "Close",
-    Parent = Top
-  })
-
-  local ImageLabel = Custom:Create("ImageLabel", {
-    Image = "rbxassetid://9886659671",
-    AnchorPoint = Vector2.new(0.5, 0.5),
-    BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-    BackgroundTransparency = 0.999,
-    BorderColor3 = Color3.fromRGB(0, 0, 0),
-    BorderSizePixel = 0,
-    Position = UDim2.new(0.49, 0, 0.5, 0),
-    Size = UDim2.new(1, -8, 1, -8),
-    Parent = Close
-  })
-
-  local TextLabel2 = Custom:Create("TextLabel", {
-    Font = Enum.Font.GothamBold,
-    TextColor3 = Color3.fromRGB(255, 255, 255),
-    TextSize = 13,
-    Text = Content,
-    TextXAlignment = Enum.TextXAlignment.Left,
-    TextYAlignment = Enum.TextYAlignment.Top,
-    BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-    BackgroundTransparency = 0.999,
-    TextColor3 = Color3.fromRGB(150, 150, 150),
-    BorderColor3 = Color3.fromRGB(0, 0, 0),
-    BorderSizePixel = 0,
-    Position = UDim2.new(0, 10, 0, 27),
-    Size = UDim2.new(1, -20, 0, 13),
-    Parent = NotificationFrameReal
-  })
-
-  TextLabel2.Size = UDim2.new(1, -20, 0, 13 + (13 * (TextLabel2.TextBounds.X // TextLabel2.AbsoluteSize.X)))
-  TextLabel2.TextWrapped = true
-
-  if TextLabel2.AbsoluteSize.Y < 27 then
-    NotificationFrame.Size = UDim2.new(1, 0, 0, 65)
-  else
-    NotificationFrame.Size = UDim2.new(1, 0, 0, TextLabel2.AbsoluteSize.Y + 40)
-  end
-
-  local Waitted = false
-
-  function Notification:Close()
-    if Waitted then return false end
-    Waitted = true
-
-    local tween = TweenService:Create(NotificationFrameReal,TweenInfo.new(tonumber(Time), Enum.EasingStyle.Back, Enum.EasingDirection.InOut),{Position = UDim2.new(0, 400, 0, 0)})
-    tween:Play()
-
-    task.wait(tonumber(Time) / 1.2)
-
-    NotificationFrame:Destroy()
-
-    Waitted = false
-  end
-
-  Close.Activated:Connect(function()
-    Notification:Close()
-	end)
-
-  TweenService:Create(NotificationFrameReal, TweenInfo.new(tonumber(Time), Enum.EasingStyle.Back, Enum.EasingDirection.InOut), {Position = UDim2.new(0, 0, 0, 0)} ):Play()
-  task.wait(tonumber(Delay))
-  Notification:Close()
-
-  return Notification
+    -- Auto close
+    task.delay(Delay, CloseNotif)
 end
+
 
 function Speed_Library:CreateWindow(Config)
   local Title = Config[1] or Config.Title or ""
