@@ -97,18 +97,19 @@ end
 
 local Open_Close = OpenClose()
 local TweenService = game:GetService("TweenService")
+
 local function MakeDraggable(topbarObject, object)
-    local dragging, dragStart, startPos = false, nil, nil
-    local tweenTime = 0.1 -- kecepatan smooth
+    local dragging = false
+    local dragStart = nil
+    local startPos = nil
 
     local function UpdatePos(input)
         local delta = input.Position - dragStart
-        local targetPos = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X,
-                                    startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-
-        -- Tween ke posisi target
-        local tween = TweenService:Create(object, TweenInfo.new(tweenTime, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Position = targetPos})
-        tween:Play()
+        local targetPos = UDim2.new(
+            startPos.X.Scale, startPos.X.Offset + delta.X,
+            startPos.Y.Scale, startPos.Y.Offset + delta.Y
+        )
+        object.Position = targetPos -- langsung update, bukan tween
     end
 
     topbarObject.InputBegan:Connect(function(input)
@@ -117,6 +118,7 @@ local function MakeDraggable(topbarObject, object)
             dragStart = input.Position
             startPos = object.Position
 
+            -- Detect release
             input.Changed:Connect(function()
                 if input.UserInputState == Enum.UserInputState.End then
                     dragging = false
@@ -130,8 +132,17 @@ local function MakeDraggable(topbarObject, object)
             UpdatePos(input)
         end
     end)
+
+    -- Support MouseMovement global drag
+    game:GetService("UserInputService").InputChanged:Connect(function(input)
+        if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+            UpdatePos(input)
+        end
+    end)
 end
 
+-- Gunakan:
+MakeDraggable(Open_Close, Open_Close)
 function CircleClick(Button, X, Y)
 	task.spawn(function()
 		Button.ClipsDescendants = true
