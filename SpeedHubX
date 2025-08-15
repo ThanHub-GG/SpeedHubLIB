@@ -1159,7 +1159,7 @@ function Item:AddParagraph(Config)
         Position = UDim2.new(0, 10, 0, 23),
         Size = UDim2.new(1, -16, 0, 12),
         Name = "ParagraphContent",
-        RichText = true -- penting untuk multi warna
+        RichText = true -- penting
     }, Paragraph)
 
     local function UpdateParagraphSize()
@@ -1174,29 +1174,26 @@ function Item:AddParagraph(Config)
     UpdateParagraphSize()
     ParagraphContent:GetPropertyChangedSignal("AbsoluteSize"):Connect(UpdateParagraphSize)
 
-    -- fungsi helper untuk konversi markup warna ke RichText
+    -- fungsi helper untuk konversi warna ke RichText
     local function parseColors(str)
         local coloredStr = str
-        -- ganti red("text") jadi <font color="rgb(255,0,0)">text</font>
-        coloredStr = coloredStr:gsub('red%("([^"]-)"%)', '<font color="#ff0000">%1</font>')
-        coloredStr = coloredStr:gsub('blue%("([^"]-)"%)', '<font color="#0000ff">%1</font>')
-        coloredStr = coloredStr:gsub('green%("([^"]-)"%)', '<font color="#00ff00">%1</font>')
+        -- default putih
+        coloredStr = coloredStr:gsub('default%("([^"]-)"%)', '<font color="#ffffff"><b>%1</b></font>')
+        coloredStr = coloredStr:gsub('red%("([^"]-)"%)', '<font color="#ff0000"><b>%1</b></font>')
+        coloredStr = coloredStr:gsub('blue%("([^"]-)"%)', '<font color="#0000ff"><b>%1</b></font>')
+        coloredStr = coloredStr:gsub('green%("([^"]-)"%)', '<font color="#00ff00"><b>%1</b></font>')
         return coloredStr
     end
 
     function SettingFuncs:Set(Config)
         local Title = Config[1] or Config.Title or ""
         local Content = Config[2] or Config.Content or ""
-
         ParagraphTitle.Text = Title
         ParagraphContent.Text = parseColors(Content)
-
         UpdateParagraphSize()
     end
 
-    -- set default content
     ParagraphContent.Text = parseColors(Content)
-
     return SettingFuncs
 end
 
