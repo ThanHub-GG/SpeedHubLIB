@@ -805,18 +805,15 @@ function Speed_Library:CreateWindow(Config)
   })
 
   -- /// Create Tab
-
- local Tabs = {}
+local Tabs = {}
 local CountTab = 0
 local CountDropdown = 0
-
--- Atur warna ungu kebiruan
-local ThemeColor = Color3.fromRGB(106, 90, 205) -- ungu kebiruan
 
 function Tabs:CreateTab(Config)
     local _Name = Config[1] or Config.Name or "" 
     local Icon = Config[2] or Config.Icon or ""
-    
+
+    -- Scroll frame untuk layers
     local ScrolLayers = Custom:Create("ScrollingFrame", {
         ScrollBarImageColor3 = Color3.fromRGB(80, 80, 80),
         ScrollBarThickness = 0,
@@ -837,6 +834,7 @@ function Tabs:CreateTab(Config)
         Parent = ScrolLayers
     })
 
+    -- Tab frame
     local Tab = Custom:Create("Frame", {
         BackgroundColor3 = Color3.fromRGB(255, 255, 255),
         BackgroundTransparency = CountTab == 0 and 0.92 or 0.999,
@@ -853,6 +851,7 @@ function Tabs:CreateTab(Config)
         Parent = Tab
     })
 
+    -- Tab button
     local TabButton = Custom:Create("TextButton", {
         Font = Enum.Font.GothamBold,
         Text = "",
@@ -893,12 +892,13 @@ function Tabs:CreateTab(Config)
         Name = "FeatureImg",
     }, Tab)
 
+    -- Highlight ChooseFrame biru kebiruan
     if CountTab == 0 then
         LayersPageLayout:JumpToIndex(0)
         NameTab.Text = _Name
 
         local ChooseFrame = Custom:Create("Frame", {
-            BackgroundColor3 = ThemeColor, -- warna ungu kebiruan
+            BackgroundColor3 = Color3.fromRGB(0, 120, 255), -- biru kebiruan
             BorderColor3 = Color3.fromRGB(0, 0, 0),
             BorderSizePixel = 0,
             Position = UDim2.new(0, 2, 0, 9),
@@ -907,13 +907,14 @@ function Tabs:CreateTab(Config)
         }, Tab)
 
         Custom:Create("UIStroke", {
-            Color = ThemeColor,
+            Color = Color3.fromRGB(0, 120, 255), -- biru kebiruan
             Thickness = 1.6,
         }, ChooseFrame)
 
         Custom:Create("UICorner", {}, ChooseFrame)
     end
 
+    -- Event saat Tab diklik
     TabButton.Activated:Connect(function()
         CircleClick(TabButton, Player:GetMouse().X, Player:GetMouse().Y)
         local FrameChoose = nil
@@ -931,17 +932,12 @@ function Tabs:CreateTab(Config)
         if FrameChoose and Tab.LayoutOrder ~= LayersPageLayout.CurrentPage.LayoutOrder then
             for _, TabFrame in pairs(ScrollTab:GetChildren()) do
                 if TabFrame.Name == "Tab" then
-                    TweenService:Create(TabFrame, TweenInfo.new(0.2, Enum.EasingStyle.Back, Enum.EasingDirection.InOut), {
-                        BackgroundTransparency = 0.999
-                    }):Play()
+                    TweenService:Create(TabFrame, TweenInfo.new(0.2, Enum.EasingStyle.Back, Enum.EasingDirection.InOut), {BackgroundTransparency = 0.999}):Play()
                 end
             end
 
-            local _TabT = TweenService:Create(Tab, TweenInfo.new(0.6, ...), {BackgroundTransparency = 0.92, BackgroundColor3 = ThemeColor})
-
-            local _FTween = TweenService:Create(FrameChoose, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {
-                Position = UDim2.new(0, 2, 0, 9 + (33 * Tab.LayoutOrder))
-            })
+            local _TabT = TweenService:Create(Tab, TweenInfo.new(0.6, Enum.EasingStyle.Back, Enum.EasingDirection.InOut), {BackgroundTransparency = 0.92})
+            local _FTween = TweenService:Create(FrameChoose, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Position = UDim2.new(0, 2, 0, 9 + (33 * Tab.LayoutOrder))})
 
             _TabT:Play()
             _FTween:Play()
@@ -951,18 +947,12 @@ function Tabs:CreateTab(Config)
             task.wait(0.05)
             NameTab.Text = _Name
 
-            TweenService:Create(FrameChoose, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {
-                Size = UDim2.new(0, 1, 0, 20)
-            }):Play()
-
+            TweenService:Create(FrameChoose, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Size = UDim2.new(0, 1, 0, 20)}):Play()
             task.wait(0.2)
-            TweenService:Create(FrameChoose, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {
-                Size = UDim2.new(0, 1, 0, 12)
-            }):Play()
+            TweenService:Create(FrameChoose, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Size = UDim2.new(0, 1, 0, 12)}):Play()
         end
     end)
 end
-
 
     --- /// Section
    
