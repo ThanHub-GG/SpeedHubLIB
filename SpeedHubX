@@ -96,35 +96,40 @@ local function OpenClose()
 end
 
 local Open_Close = OpenClose()
+local TweenService = game:GetService("TweenService")
+local function MakeDraggable(topbarObject, object)
+    local dragging, dragStart, startPos = false, nil, nil
+    local tweenTime = 0.5 -- kecepatan smooth
 
-local function MakeDraggable(topbarobject, object)
-  local dragging, dragStart, startPos = false, nil, nil
+    local function UpdatePos(input)
+        local delta = input.Position - dragStart
+        local targetPos = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X,
+                                    startPos.Y.Scale, startPos.Y.Offset + delta.Y)
 
-  local function UpdatePos(input)
-    local delta = input.Position - dragStart
-    local newPos = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-    object.Position = newPos
-  end
+        -- Tween ke posisi target
+        local tween = TweenService:Create(object, TweenInfo.new(tweenTime, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Position = targetPos})
+        tween:Play()
+    end
 
-  topbarobject.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-      dragging = true
-      dragStart = input.Position
-      startPos = object.Position
+    topbarObject.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = true
+            dragStart = input.Position
+            startPos = object.Position
 
-      input.Changed:Connect(function()
-        if input.UserInputState == Enum.UserInputState.End then
-          dragging = false
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    dragging = false
+                end
+            end)
         end
-      end)
-    end
-  end)
+    end)
 
-  topbarobject.InputChanged:Connect(function(input)
-    if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-      UpdatePos(input)
-    end
-  end)
+    topbarObject.InputChanged:Connect(function(input)
+        if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+            UpdatePos(input)
+        end
+    end)
 end
 
 function CircleClick(Button, X, Y)
