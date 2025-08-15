@@ -469,14 +469,13 @@ local TextLabel = Custom:Create("TextLabel", {
     Text = Title,
     TextColor3 = Color3.fromRGB(255, 255, 255),
     TextSize = 14,
-    TextXAlignment = Enum.TextXAlignment.Center,  -- tengah
-    TextYAlignment = Enum.TextYAlignment.Center,  -- vertikal tengah
-    BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+    TextXAlignment = Enum.TextXAlignment.Center,
+    TextYAlignment = Enum.TextYAlignment.Center,
     BackgroundTransparency = 1,
     BorderSizePixel = 0,
     AnchorPoint = Vector2.new(0.5, 0.5),
-    Position = UDim2.new(0.5, 0, 0.5, -4), -- posisinya di tengah Top
-    Size = UDim2.new(0.5, 0, 1, 0)
+    Position = UDim2.new(0.5, 0, 0.35, 0), -- sekitar 1/3 dari top
+    Size = UDim2.new(0.5, 0, 0.3, 0)
 }, Top)
 
   Custom:Create("UICorner", {}, Top)
@@ -486,14 +485,13 @@ local TextLabel1 = Custom:Create("TextLabel", {
     Text = Description,
     TextColor3 = Custom.ColorRGB,
     TextSize = 14,
-    TextXAlignment = Enum.TextXAlignment.Center,  -- tengah
-    TextYAlignment = Enum.TextYAlignment.Center,  -- vertikal tengah
-    BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+    TextXAlignment = Enum.TextXAlignment.Center,
+    TextYAlignment = Enum.TextYAlignment.Center,
     BackgroundTransparency = 1,
     BorderSizePixel = 0,
     AnchorPoint = Vector2.new(0.5, 0.5),
-    Position = UDim2.new(0.5, 0, 0.7, -4), -- sedikit di bawah title
-    Size = UDim2.new(0.5, 0, 1, 0)
+    Position = UDim2.new(0.5, 0, 0.65, 0), -- lebih bawah dari title
+    Size = UDim2.new(0.5, 0, 0.3, 0)
 }, Top)
 
   Custom:Create("UIStroke", {
