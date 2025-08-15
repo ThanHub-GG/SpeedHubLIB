@@ -2061,16 +2061,18 @@ local SearchBar = Custom:Create("TextBox", {
 -- Search Bar Logic
 SearchBar:GetPropertyChangedSignal("Text"):Connect(function()
     local searchText = SearchBar.Text:lower()
-    for _, optionFrame in pairs(ScrollSelect:GetChildren()) do
-        if optionFrame:IsA("Frame") and optionFrame.Name == "Option" then
-            local optionLabel = optionFrame:FindFirstChild("OptionText")
+    for _, child in pairs(ScrollSelect:GetChildren()) do
+        -- Pastikan hanya memproses Frame Option
+        if child:IsA("Frame") and child.Name == "Option" then
+            local optionLabel = child:FindFirstChild("OptionText")
             if optionLabel then
                 local optionText = optionLabel.Text:lower()
-                optionFrame.Visible = optionText:find(searchText) ~= nil
+                child.Visible = optionText:find(searchText) ~= nil
             end
         end
     end
 end)
+
 
 
         Custom:Create("UIListLayout", {
@@ -2091,28 +2093,33 @@ end)
           end
         end
         
-        function Funcs_Dropdown:Set(Value)
-          Funcs_Dropdown.Value = Value or Funcs_Dropdown.Value
+function Funcs_Dropdown:Set(Value)
+    Funcs_Dropdown.Value = Value or Funcs_Dropdown.Value
 
-          for _, Drop in pairs(ScrollSelect:GetChildren()) do
-            if Drop.Name ~= "UIListLayout" then
-              local isTextFound = table.find(Funcs_Dropdown.Value, Drop.OptionText.Text)
-              local tweenInfoInOut = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
+    for _, Drop in pairs(ScrollSelect:GetChildren()) do
+        -- Hanya proses Frame Option
+        if Drop:IsA("Frame") and Drop.Name == "Option" then
+            local optionLabel = Drop:FindFirstChild("OptionText")
+            if optionLabel then
+                local isTextFound = table.find(Funcs_Dropdown.Value, optionLabel.Text)
+                local tweenInfoInOut = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
 
-              local Size = isTextFound and UDim2.new(0, 1, 0, 12) or UDim2.new(0, 0, 0, 0)
-              local BackgroundTransparency = isTextFound and 0.935 or 0.999
-              local Transparency = isTextFound and 0 or 0.999
-          
-              TweenService:Create(Drop.ChooseFrame, tweenInfoInOut, {Size = Size}):Play()
-              TweenService:Create(Drop.ChooseFrame.UIStroke, tweenInfoInOut, {Transparency = Transparency}):Play()
-              TweenService:Create(Drop, tweenInfoInOut, {BackgroundTransparency = BackgroundTransparency}):Play()
+                local Size = isTextFound and UDim2.new(0, 1, 0, 12) or UDim2.new(0, 0, 0, 0)
+                local BackgroundTransparency = isTextFound and 0.935 or 0.999
+                local Transparency = isTextFound and 0 or 0.999
+
+                TweenService:Create(Drop.ChooseFrame, tweenInfoInOut, {Size = Size}):Play()
+                TweenService:Create(Drop.ChooseFrame.UIStroke, tweenInfoInOut, {Transparency = Transparency}):Play()
+                TweenService:Create(Drop, tweenInfoInOut, {BackgroundTransparency = BackgroundTransparency}):Play()
             end
-          end
-        
-          local DropdownValueTable = table.concat(Funcs_Dropdown.Value, ", ")
-          OptionSelecting.Text = DropdownValueTable ~= "" and DropdownValueTable or "Select Options"
-          Callback(Funcs_Dropdown.Value)
         end
+    end
+
+    local DropdownValueTable = table.concat(Funcs_Dropdown.Value, ", ")
+    OptionSelecting.Text = DropdownValueTable ~= "" and DropdownValueTable or "Select Options"
+    Callback(Funcs_Dropdown.Value)
+end
+
 
         function Funcs_Dropdown:AddOption(OptionName)
           OptionName = OptionName or "Option"
