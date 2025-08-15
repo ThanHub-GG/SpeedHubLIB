@@ -805,155 +805,149 @@ function Speed_Library:CreateWindow(Config)
   })
 
   -- /// Create Tab
-local Tabs = {}
-local CountTab = 0
-local CountDropdown = 0
-
-function Tabs:CreateTab(Config)
+ local Tabs = {}
+  local CountTab = 0
+  local CountDropdown = 0
+  function Tabs:CreateTab(Config)
     local _Name = Config[1] or Config.Name or "" 
     local Icon = Config[2] or Config.Icon or ""
-
-    -- Scroll frame untuk layers
+    
     local ScrolLayers = Custom:Create("ScrollingFrame", {
-        ScrollBarImageColor3 = Color3.fromRGB(80, 80, 80),
-        ScrollBarThickness = 0,
-        Active = true,
-        LayoutOrder = CountTab,
-        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-        BackgroundTransparency = 0.999,
-        BorderColor3 = Color3.fromRGB(0, 0, 0),
-        BorderSizePixel = 0,
-        Size = UDim2.new(1, 0, 1, 0),
-        Name = "ScrolLayers",
-        Parent = LayersFolder
-    })
+			ScrollBarImageColor3 = Color3.fromRGB(80, 80, 80),
+			ScrollBarThickness = 0,
+			Active = true,
+			LayoutOrder = CountTab,
+			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+			BackgroundTransparency = 0.999,
+			BorderColor3 = Color3.fromRGB(0, 0, 0),
+			BorderSizePixel = 0,
+			Size = UDim2.new(1, 0, 1, 0),
+			Name = "ScrolLayers",
+			Parent = LayersFolder
+		})
 
     Custom:Create("UIListLayout", {
-        Padding = UDim.new(0, 3),
-        SortOrder = Enum.SortOrder.LayoutOrder,
-        Parent = ScrolLayers
+      Padding = UDim.new(0, 3),
+      SortOrder = Enum.SortOrder.LayoutOrder,
+      Parent = ScrolLayers
     })
 
-    -- Tab frame
     local Tab = Custom:Create("Frame", {
-        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-        BackgroundTransparency = CountTab == 0 and 0.92 or 0.999,
-        BorderColor3 = Color3.fromRGB(0, 0, 0),
-        BorderSizePixel = 0,
-        LayoutOrder = CountTab,
-        Size = UDim2.new(1, 0, 0, 30),
-        Name = "Tab",
-        Parent = ScrollTab
-    })
+			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+			BackgroundTransparency = CountTab == 0 and 0.92 or 0.999,
+			BorderColor3 = Color3.fromRGB(0, 0, 0),
+			BorderSizePixel = 0,
+			LayoutOrder = CountTab,
+			Size = UDim2.new(1, 0, 0, 30),
+			Name = "Tab",
+			Parent = ScrollTab
+		})
 
     Custom:Create("UICorner", {
-        CornerRadius = UDim.new(0, 4),
-        Parent = Tab
+      CornerRadius = UDim.new(0, 4),
+      Parent = Tab
     })
 
-    -- Tab button
     local TabButton = Custom:Create("TextButton", {
-        Font = Enum.Font.GothamBold,
-        Text = "",
-        TextColor3 = Color3.fromRGB(255, 255, 255),
-        TextSize = 13,
-        TextXAlignment = Enum.TextXAlignment.Left,
-        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-        BackgroundTransparency = 0.999,
-        BorderColor3 = Color3.fromRGB(0, 0, 0),
-        BorderSizePixel = 0,
-        Size = UDim2.new(1, 0, 1, 0),
-        Name = "TabButton",
+      Font = Enum.Font.GothamBold,
+      Text = "",
+      TextColor3 = Color3.fromRGB(255, 255, 255),
+      TextSize = 13,
+      TextXAlignment = Enum.TextXAlignment.Left,
+      BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+      BackgroundTransparency = 0.999,
+      BorderColor3 = Color3.fromRGB(0, 0, 0),
+      BorderSizePixel = 0,
+      Size = UDim2.new(1, 0, 1, 0),
+      Name = "TabButton",
     }, Tab)
 
     Custom:Create("TextLabel", {
-        Font = Enum.Font.GothamBold,
-        Text = _Name,
-        TextColor3 = Color3.fromRGB(255, 255, 255),
-        TextSize = 13,
-        TextXAlignment = Enum.TextXAlignment.Left,
-        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-        BackgroundTransparency = 0.999,
-        BorderColor3 = Color3.fromRGB(0, 0, 0),
-        BorderSizePixel = 0,
-        Size = UDim2.new(1, 0, 1, 0),
-        Position = UDim2.new(0, 30, 0, 0),
-        Name = "TabName",
+      Font = Enum.Font.GothamBold,
+      Text = _Name,
+      TextColor3 = Color3.fromRGB(255, 255, 255),
+      TextSize = 13,
+      TextXAlignment = Enum.TextXAlignment.Left,
+      BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+      BackgroundTransparency = 0.999,
+      BorderColor3 = Color3.fromRGB(0, 0, 0),
+      BorderSizePixel = 0,
+      Size = UDim2.new(1, 0, 1, 0),
+      Position = UDim2.new(0, 30, 0, 0),
+      Name = "TabName",
     }, Tab)
 
     Custom:Create("ImageLabel", {
-        Image = Icon,
-        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-        BackgroundTransparency = 0.999,
-        BorderColor3 = Color3.fromRGB(0, 0, 0),
-        BorderSizePixel = 0,
-        Position = UDim2.new(0, 9, 0, 7),
-        Size = UDim2.new(0, 16, 0, 16),
-        Name = "FeatureImg",
+      Image = Icon,
+      BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+      BackgroundTransparency = 0.999,
+      BorderColor3 = Color3.fromRGB(0, 0, 0),
+      BorderSizePixel = 0,
+      Position = UDim2.new(0, 9, 0, 7),
+      Size = UDim2.new(0, 16, 0, 16),
+      Name = "FeatureImg",
     }, Tab)
 
-    -- Highlight ChooseFrame biru kebiruan
     if CountTab == 0 then
-        LayersPageLayout:JumpToIndex(0)
-        NameTab.Text = _Name
-
-        local ChooseFrame = Custom:Create("Frame", {
-            BackgroundColor3 = Color3.fromRGB(0, 120, 255), -- biru kebiruan
-            BorderColor3 = Color3.fromRGB(0, 0, 0),
-            BorderSizePixel = 0,
-            Position = UDim2.new(0, 2, 0, 9),
-            Size = UDim2.new(0, 1, 0, 12),
-            Name = "ChooseFrame",
-        }, Tab)
-
-        Custom:Create("UIStroke", {
-            Color = Color3.fromRGB(0, 120, 255), -- biru kebiruan
-            Thickness = 1.6,
-        }, ChooseFrame)
-
-        Custom:Create("UICorner", {}, ChooseFrame)
+      LayersPageLayout:JumpToIndex(0)
+      NameTab.Text = _Name
+  
+      local ChooseFrame = Custom:Create("Frame", {
+        BackgroundColor3 = Custom.ColorRGB,
+        BorderColor3 = Color3.fromRGB(0, 0, 0),
+        BorderSizePixel = 0,
+        Position = UDim2.new(0, 2, 0, 9),
+        Size = UDim2.new(0, 1, 0, 12),
+        Name = "ChooseFrame",
+      }, Tab)
+  
+      Custom:Create("UIStroke", {
+        Color = Custom.ColorRGB,
+        Thickness = 1.6,
+      }, ChooseFrame)
+  
+      Custom:Create("UICorner", {}, ChooseFrame)
     end
 
-    -- Event saat Tab diklik
     TabButton.Activated:Connect(function()
-        CircleClick(TabButton, Player:GetMouse().X, Player:GetMouse().Y)
-        local FrameChoose = nil
+      CircleClick(TabButton, Player:GetMouse().X, Player:GetMouse().Y)
+      local FrameChoose = nil
 
-        for _, s in pairs(ScrollTab:GetChildren()) do
-            for _, v in pairs(s:GetChildren()) do
-                if v.Name == "ChooseFrame" then
-                    FrameChoose = v
-                    break
-                end
-            end
-            if FrameChoose then break end
+      for _, s in pairs(ScrollTab:GetChildren()) do
+        for _, v in pairs(s:GetChildren()) do
+          if v.Name == "ChooseFrame" then
+            FrameChoose = v
+            break
+          end
         end
 
-        if FrameChoose and Tab.LayoutOrder ~= LayersPageLayout.CurrentPage.LayoutOrder then
-            for _, TabFrame in pairs(ScrollTab:GetChildren()) do
-                if TabFrame.Name == "Tab" then
-                    TweenService:Create(TabFrame, TweenInfo.new(0.2, Enum.EasingStyle.Back, Enum.EasingDirection.InOut), {BackgroundTransparency = 0.999}):Play()
-                end
-            end
-
-            local _TabT = TweenService:Create(Tab, TweenInfo.new(0.6, Enum.EasingStyle.Back, Enum.EasingDirection.InOut), {BackgroundTransparency = 0.92})
-            local _FTween = TweenService:Create(FrameChoose, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Position = UDim2.new(0, 2, 0, 9 + (33 * Tab.LayoutOrder))})
-
-            _TabT:Play()
-            _FTween:Play()
-
-            LayersPageLayout:JumpToIndex(Tab.LayoutOrder)
-
-            task.wait(0.05)
-            NameTab.Text = _Name
-
-            TweenService:Create(FrameChoose, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Size = UDim2.new(0, 1, 0, 20)}):Play()
-            task.wait(0.2)
-            TweenService:Create(FrameChoose, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Size = UDim2.new(0, 1, 0, 12)}):Play()
+        if FrameChoose then break end
+      end
+  
+      if FrameChoose and Tab.LayoutOrder ~= LayersPageLayout.CurrentPage.LayoutOrder then
+        for _, TabFrame in pairs(ScrollTab:GetChildren()) do
+          if TabFrame.Name == "Tab" then
+            TweenService:Create(TabFrame, TweenInfo.new(0.2, Enum.EasingStyle.Back, Enum.EasingDirection.InOut), {BackgroundTransparency = 0.999}):Play()
+          end
         end
+  
+        local _TabT = TweenService:Create(Tab, TweenInfo.new(0.6, Enum.EasingStyle.Back, Enum.EasingDirection.InOut), {BackgroundTransparency = 0.92})
+        local _FTween = TweenService:Create(FrameChoose, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Position = UDim2.new(0, 2, 0, 9 + (33 * Tab.LayoutOrder))})
+  
+        _TabT:Play()
+        _FTween:Play()
+  
+        LayersPageLayout:JumpToIndex(Tab.LayoutOrder)
+  
+        task.wait(0.05)
+        NameTab.Text = _Name
+  
+        TweenService:Create(FrameChoose, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Size = UDim2.new(0, 1, 0, 20)}):Play()
+  
+        task.wait(0.2)
+        TweenService:Create(FrameChoose, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Size = UDim2.new(0, 1, 0, 12)}):Play()
+      end
     end)
-end
-
     --- /// Section
    
     local Sections, CountSection = {}, 0
