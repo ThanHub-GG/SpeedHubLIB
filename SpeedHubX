@@ -1118,81 +1118,87 @@ end
       UpdateSizeScroll()
 
       local Item, ItemCount = {}, 0
-      function Item:AddParagraph(Config)
+function Item:AddParagraph(Config)
+    local Title = Config[1] or Config.Title or ""
+    local Content = Config[2] or Config.Content or ""
+    local SettingFuncs = {}
+
+    local Paragraph = Custom:Create("Frame", {
+        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+        BackgroundTransparency = 0.935,
+        BorderSizePixel = 0,
+        LayoutOrder = ItemCount,
+        Size = UDim2.new(1, 0, 0, 35),
+        Name = "Paragraph",
+    }, SectionAdd)
+
+    Custom:Create("UICorner", { CornerRadius = UDim.new(0, 4) }, Paragraph)
+
+    local ParagraphTitle = Custom:Create("TextLabel", {
+        Font = Enum.Font.GothamBold,
+        Text = Title,
+        TextColor3 = Color3.fromRGB(231, 231, 231),
+        TextSize = 13,
+        TextXAlignment = Enum.TextXAlignment.Left,
+        TextYAlignment = Enum.TextYAlignment.Top,
+        BackgroundTransparency = 1,
+        Position = UDim2.new(0, 10, 0, 10),
+        Size = UDim2.new(1, -16, 0, 13),
+        Name = "ParagraphTitle",
+    }, Paragraph)
+
+    local ParagraphContent = Custom:Create("TextLabel", {
+        Font = Enum.Font.GothamBold,
+        Text = Content,
+        TextColor3 = Color3.fromRGB(255, 255, 255),
+        TextSize = 12,
+        TextTransparency = 0.6,
+        TextXAlignment = Enum.TextXAlignment.Left,
+        TextYAlignment = Enum.TextYAlignment.Top,
+        BackgroundTransparency = 1,
+        Position = UDim2.new(0, 10, 0, 23),
+        Size = UDim2.new(1, -16, 0, 12),
+        Name = "ParagraphContent",
+        RichText = true -- penting untuk multi warna
+    }, Paragraph)
+
+    local function UpdateParagraphSize()
+        ParagraphContent.TextWrapped = false
+        local lineCount = math.ceil(ParagraphContent.TextBounds.X / ParagraphContent.AbsoluteSize.X)
+        ParagraphContent.Size = UDim2.new(1, -16, 0, 12 + (12 * lineCount))
+        Paragraph.Size = UDim2.new(1, 0, 0, ParagraphContent.AbsoluteSize.Y + 33)
+        ParagraphContent.TextWrapped = true
+        UpdateSizeSection()
+    end
+
+    UpdateParagraphSize()
+    ParagraphContent:GetPropertyChangedSignal("AbsoluteSize"):Connect(UpdateParagraphSize)
+
+    -- fungsi helper untuk konversi markup warna ke RichText
+    local function parseColors(str)
+        local coloredStr = str
+        -- ganti red("text") jadi <font color="rgb(255,0,0)">text</font>
+        coloredStr = coloredStr:gsub('red%("([^"]-)"%)', '<font color="#ff0000">%1</font>')
+        coloredStr = coloredStr:gsub('blue%("([^"]-)"%)', '<font color="#0000ff">%1</font>')
+        coloredStr = coloredStr:gsub('green%("([^"]-)"%)', '<font color="#00ff00">%1</font>')
+        return coloredStr
+    end
+
+    function SettingFuncs:Set(Config)
         local Title = Config[1] or Config.Title or ""
         local Content = Config[2] or Config.Content or ""
-        local SettingFuncs = {}
 
-        local Paragraph = Custom:Create("Frame", {
-          BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-          BackgroundTransparency = 0.935,
-          BorderColor3 = Color3.fromRGB(0, 0, 0),
-          BorderSizePixel = 0,
-          LayoutOrder = ItemCount,
-          Size = UDim2.new(1, 0, 0, 35),
-          Name = "Paragraph",
-        }, SectionAdd)
-      
-        Custom:Create("UICorner", {
-          CornerRadius = UDim.new(0, 4),
-        }, Paragraph)
-
-        local ParagraphTitle = Custom:Create("TextLabel", {
-          Font = Enum.Font.GothamBold,
-          Text = Title,
-          TextColor3 = Color3.fromRGB(231, 231, 231),
-          TextSize = 13,
-          TextXAlignment = Enum.TextXAlignment.Left,
-          TextYAlignment = Enum.TextYAlignment.Top,
-          BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-          BackgroundTransparency = 0.999,
-          BorderSizePixel = 0,
-          Position = UDim2.new(0, 10, 0, 10),
-          Size = UDim2.new(1, -16, 0, 13),
-          Name = "ParagraphTitle",
-        }, Paragraph)
-      
-        local ParagraphContent = Custom:Create("TextLabel", {
-          Font = Enum.Font.GothamBold,
-          Text = Content,
-          TextColor3 = Color3.fromRGB(255, 255, 255),
-          TextSize = 12,
-          TextTransparency = 0.6,
-          TextXAlignment = Enum.TextXAlignment.Left,
-          TextYAlignment = Enum.TextYAlignment.Bottom,
-          BackgroundTransparency = 0.999,
-          BorderSizePixel = 0,
-          Position = UDim2.new(0, 10, 0, 23),
-          Name = "ParagraphContent",
-        }, Paragraph)
-
-        local function UpdateParagraphSize()
-          ParagraphContent.TextWrapped = false
-          local lineCount = math.ceil(ParagraphContent.TextBounds.X / ParagraphContent.AbsoluteSize.X)
-
-          ParagraphContent.Size = UDim2.new(1, -16, 0, 12 + (12 * lineCount))
-          Paragraph.Size = UDim2.new(1, 0, 0, ParagraphContent.AbsoluteSize.Y + 33)
-          ParagraphContent.TextWrapped = true
-
-          UpdateSizeSection()
-        end
+        ParagraphTitle.Text = Title
+        ParagraphContent.Text = parseColors(Content)
 
         UpdateParagraphSize()
+    end
 
-        ParagraphContent:GetPropertyChangedSignal("AbsoluteSize"):Connect(UpdateParagraphSize)
+    -- set default content
+    ParagraphContent.Text = parseColors(Content)
 
-        function SettingFuncs:Set(Config)
-          local Title = Config[1] or Config.Title or ""
-          local Content = Config[2] or Config.Content or ""
-
-          ParagraphTitle.Text = Title
-          ParagraphContent.Text = Content
-
-          UpdateParagraphSize()
-        end
-
-        return SettingFuncs
-      end
+    return SettingFuncs
+end
 
       function Item:AddSeperator(Config)
         local Title = Config[1] or Config.Title or ""
