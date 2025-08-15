@@ -2063,11 +2063,15 @@ SearchBar:GetPropertyChangedSignal("Text"):Connect(function()
     local searchText = SearchBar.Text:lower()
     for _, optionFrame in pairs(ScrollSelect:GetChildren()) do
         if optionFrame:IsA("Frame") and optionFrame.Name == "Option" then
-            local optionText = optionFrame.OptionText.Text:lower()
-            optionFrame.Visible = optionText:find(searchText) ~= nil
+            local optionLabel = optionFrame:FindFirstChild("OptionText")
+            if optionLabel then
+                local optionText = optionLabel.Text:lower()
+                optionFrame.Visible = optionText:find(searchText) ~= nil
+            end
         end
     end
 end)
+
 
         Custom:Create("UIListLayout", {
           Padding = UDim.new(0, 3),
