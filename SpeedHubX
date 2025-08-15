@@ -1279,100 +1279,116 @@ end
         return LineFuncs
      end
 
-function Item:AddButton(Config)
-    local Title = Config[1] or Config.Title or ""
-    local Content = Config[2] or Config.Content or ""
-    local Icon = Config[3] or Config.Icon or "rbxassetid://10734898355"
-    local Callback = Config[4] or Config.Callback or function() end
-    local Funcs_Button = {}
+      function Item:AddButton(Config)
+        local Title = Config[1] or Config.Title or ""
+        local Content = Config[2] or Config.Content or ""
+        local Icon = Config[3] or Config.Icon or "rbxassetid://16932740082"
+        local Callback = Config[4] or Config.Callback or function() end
+        local Funcs_Button = {}
 
-    local Button = Custom:Create("Frame", {
-        Name = "Button",
-        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-        BackgroundTransparency = 0.935,
-        BorderSizePixel = 0,
-        LayoutOrder = ItemCount,
-        Size = UDim2.new(1, 0, 0, 35)
-    }, SectionAdd)
+        local Button = Custom:Create("Frame", {
+					Name = "Button",
+					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+					BackgroundTransparency = 0.935,
+					BorderSizePixel = 0,
+					LayoutOrder = ItemCount,
+					Size = UDim2.new(1, 0, 0, 35)
+				}, SectionAdd)
 
-    Custom:Create("UICorner", { CornerRadius = UDim.new(0, 4) }, Button)
+        Custom:Create("UICorner", {
+          CornerRadius = UDim.new(0, 4)
+        }, Button)
 
-    local ButtonTitle = Custom:Create("TextLabel", {
-        Name = "ButtonTitle",
-        Font = Enum.Font.GothamBold,
-        Text = Title,
-        TextSize = 13,
-        TextColor3 = Color3.fromRGB(231, 231, 231),
-        TextXAlignment = Enum.TextXAlignment.Left,
-        TextYAlignment = Enum.TextYAlignment.Top,
-        BackgroundTransparency = 0.999,
-        Position = UDim2.new(0, 10, 0, 10),
-        Size = UDim2.new(1, -100, 0, 13)
-    }, Button)
+        Custom:Create("TextLabel", {
+					Name = "ButtonTitle",
+					Font = Enum.Font.GothamBold,
+					Text = Title,
+					TextColor3 = Color3.fromRGB(231, 231, 231),
+					TextSize = 13,
+					TextXAlignment = Enum.TextXAlignment.Left,
+					TextYAlignment = Enum.TextYAlignment.Top,
+					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+					BackgroundTransparency = 0.999,
+					BorderSizePixel = 0,
+					Position = UDim2.new(0, 10, 0, 10),
+					Size = UDim2.new(1, -100, 0, 13)
+				}, Button)
 
-    local ButtonContent = Custom:Create("TextLabel", {
-        Name = "ButtonContent",
-        Font = Enum.Font.GothamBold,
-        Text = Content,
-        TextSize = 12,
-        TextColor3 = Color3.fromRGB(255, 255, 255),
-        TextTransparency = 0.6,
-        TextXAlignment = Enum.TextXAlignment.Left,
-        TextYAlignment = Enum.TextYAlignment.Bottom,
-        BackgroundTransparency = 0.999,
-        Position = UDim2.new(0, 10, 0, 23),
-        Size = UDim2.new(1, -100, 0, 12)
-    }, Button)
+        local ButtonContent = Custom:Create("TextLabel", {
+					Name = "ButtonContent",
+					Font = Enum.Font.GothamBold,
+					Text = Content,
+					TextColor3 = Color3.fromRGB(255, 255, 255),
+					TextSize = 12,
+					TextTransparency = 0.6,
+					TextXAlignment = Enum.TextXAlignment.Left,
+					TextYAlignment = Enum.TextYAlignment.Bottom,
+					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+					BackgroundTransparency = 0.999,
+					BorderSizePixel = 0,
+					Position = UDim2.new(0, 10, 0, 23),
+					Size = UDim2.new(1, -100, 0, 12)
+				}, Button)
 
-    local FeatureFrame = Custom:Create("Frame", {
-        Name = "FeatureFrame",
-        AnchorPoint = Vector2.new(1, 0.5),
-        BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-        BackgroundTransparency = 0.999,
-        BorderSizePixel = 0,
-        Position = UDim2.new(1, -15, 0.5, 0),
-        Size = UDim2.new(0, 28, 0, 28)
-    }, Button)
-
-    Custom:Create("UICorner", { CornerRadius = UDim.new(0, 4) }, FeatureFrame)
-
-    local FeatureImg = Custom:Create("ImageLabel", {
-        Name = "FeatureImg",
-        Image = Icon,
-        AnchorPoint = Vector2.new(0.5, 0.5),
-        BackgroundTransparency = 0.999,
-        Position = UDim2.new(0.5, 0, 0.5, 0),
-        Size = UDim2.new(0.7, 0, 0.7, 0)
-    }, FeatureFrame)
-
-    local ButtonClickArea = Custom:Create("TextButton", {
-        Name = "ButtonClickArea",
-        BackgroundTransparency = 1,
-        Size = UDim2.new(1, 0, 1, 0),
-        Text = ""
-    }, Button)
-
-    -- Hover effect (sedikit lebih gelap tapi masih semi transparan)
-    ButtonClickArea.MouseEnter:Connect(function()
-        TweenService:Create(Button, TweenInfo.new(0.15, Enum.EasingStyle.Quad), {BackgroundTransparency = 0.85}):Play()
-    end)
-    ButtonClickArea.MouseLeave:Connect(function()
-        TweenService:Create(Button, TweenInfo.new(0.15, Enum.EasingStyle.Quad), {BackgroundTransparency = 0.935}):Play()
-    end)
-
-    -- Click animation
-    ButtonClickArea.Activated:Connect(function()
-        CircleClick(ButtonClickArea, Player:GetMouse().X, Player:GetMouse().Y)
-        TweenService:Create(Button, TweenInfo.new(0.1, Enum.EasingStyle.Quad), {BackgroundTransparency = 0.75}):Play()
-        task.delay(0.1, function()
-            TweenService:Create(Button, TweenInfo.new(0.15, Enum.EasingStyle.Quad), {BackgroundTransparency = 0.935}):Play()
+        local function UpdateButtonSize()
+          local _Height = 12 + (12 * (ButtonContent.TextBounds.X // ButtonContent.AbsoluteSize.X))
+          ButtonContent.Size = UDim2.new(1, -100, 0, _Height)
+          
+          Button.Size = UDim2.new(1, 0, 0, ButtonContent.AbsoluteSize.Y + 33)
+        end
+      
+        ButtonContent.TextWrapped = true
+        UpdateButtonSize()
+      
+        ButtonContent:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
+          ButtonContent.TextWrapped = false
+          UpdateButtonSize()
+          ButtonContent.TextWrapped = true
+          UpdateSizeSection()
         end)
-        Callback()
-    end)
 
-    ItemCount += 1
-    return Funcs_Button
-end
+        local ButtonButton = Custom:Create("TextButton", {
+					Name = "ButtonButton",
+					Font = Enum.Font.SourceSans,
+					Text = "",
+					TextColor3 = Color3.fromRGB(0, 0, 0),
+					TextSize = 14,
+					BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+					BackgroundTransparency = 0.999,
+					BorderSizePixel = 0,
+					Size = UDim2.new(1, 0, 1, 0)
+				}, Button)
+
+        local FeatureFrame1 = Custom:Create("Frame", {
+					Name = "FeatureFrame",
+					AnchorPoint = Vector2.new(1, 0.5),
+					BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+					BackgroundTransparency = 0.999,
+					BorderSizePixel = 0,
+					Position = UDim2.new(1, -15, 0.5, 0),
+					Size = UDim2.new(0, 25, 0, 25)
+				}, Button)
+
+        Custom:Create("ImageLabel", {
+          Name = "FeatureImg",
+          Image = Icon,
+          AnchorPoint = Vector2.new(0.5, 0.5),
+          BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+          BackgroundTransparency = 0.999,
+          BorderSizePixel = 0,
+          Position = UDim2.new(0.5, 0, 0.5, 0),
+          Size = UDim2.new(1, 0, 1, 0)
+        }, FeatureFrame1)
+
+        ButtonButton.Activated:Connect(function()
+					CircleClick(ButtonButton, Player:GetMouse().X, Player:GetMouse().Y)
+
+					Callback()
+				end)
+
+        ItemCount += 1
+				return Funcs_Button
+      end
 
 function Item:AddToggle(Config)
     local Title = Config[1] or Config.Title or ""
