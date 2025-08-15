@@ -99,7 +99,7 @@ local Open_Close = OpenClose()
 local TweenService = game:GetService("TweenService")
 local function MakeDraggable(topbarObject, object)
     local dragging, dragStart, startPos = false, nil, nil
-    local tweenTime = 0.5 -- kecepatan smooth
+    local tweenTime = 0.1 -- kecepatan smooth
 
     local function UpdatePos(input)
         local delta = input.Position - dragStart
