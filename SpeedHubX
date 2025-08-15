@@ -1384,111 +1384,141 @@ end
 				return Funcs_Button
       end
 
-function Item:AddToggleOrBox(Config)
+function Item:AddToggle(Config)
     local Title = Config[1] or Config.Title or ""
     local Content = Config[2] or Config.Content or ""
     local Default = Config[3] or Config.Default or false
-    local Mode = Config.Mode or "Toggle" -- "Toggle" atau "Box"
-    local Callback = Config[4] or Config.Callback or function() end
+    local Mode = Config[4] or Config.Mode or "Toggle" -- "Toggle" atau "Box"
+    local Callback = Config[5] or Config.Callback or function() end
 
-    local Funcs = {Value = Default}
-    local TweenService = game:GetService("TweenService")
+    local Funcs_Toggle = {Value = Default}
 
-    local MainFrame = Custom:Create("Frame", {
-        Name = "ToggleOrBox",
-        BackgroundColor3 = Color3.fromRGB(35,35,35),
+    local Toggle = Custom:Create("Frame", {
+        Name = "Toggle",
+        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+        BackgroundTransparency = 0.935,
         BorderSizePixel = 0,
         LayoutOrder = ItemCount,
-        Size = UDim2.new(1,0,0,35),
+        Size = UDim2.new(1, 0, 0, 35)
     }, SectionAdd)
-    Custom:Create("UICorner",{CornerRadius=UDim.new(0,6)}, MainFrame)
 
-    -- Title
-    local TitleLabel = Custom:Create("TextLabel", {
-        Text = Title,
+    Custom:Create("UICorner", { CornerRadius = UDim.new(0, 4) }, Toggle)
+
+    local ToggleTitle = Custom:Create("TextLabel", {
+        Name = "ToggleTitle",
         Font = Enum.Font.GothamBold,
-        TextColor3 = Color3.fromRGB(230,230,230),
-        TextSize = 14,
+        Text = Title,
+        TextSize = 13,
+        TextColor3 = Color3.fromRGB(231, 231, 231),
         TextXAlignment = Enum.TextXAlignment.Left,
-        BackgroundTransparency = 1,
-        Position = UDim2.new(0,10,0,8),
-        Size = UDim2.new(1,-50,0,14)
-    }, MainFrame)
+        TextYAlignment = Enum.TextYAlignment.Top,
+        BackgroundTransparency = 0.999,
+        Position = UDim2.new(0, 10, 0, 10),
+        Size = UDim2.new(1, -100, 0, 13)
+    }, Toggle)
 
-    -- Content/desc
-    local ContentLabel = Custom:Create("TextLabel", {
+    local ToggleContent = Custom:Create("TextLabel", {
+        Name = "ToggleContent",
+        Font = Enum.Font.GothamBold,
         Text = Content,
-        Font = Enum.Font.Gotham,
-        TextColor3 = Color3.fromRGB(180,180,180),
         TextSize = 12,
-        BackgroundTransparency = 1,
-        Position = UDim2.new(0,10,0,24),
-        Size = UDim2.new(1,-50,0,12),
-        TextXAlignment = Enum.TextXAlignment.Left
-    }, MainFrame)
+        TextColor3 = Color3.fromRGB(255, 255, 255),
+        TextTransparency = 0.6,
+        TextXAlignment = Enum.TextXAlignment.Left,
+        TextYAlignment = Enum.TextYAlignment.Bottom,
+        BackgroundTransparency = 0.999,
+        Position = UDim2.new(0, 10, 0, 23),
+        Size = UDim2.new(1, -100, 0, 12)
+    }, Toggle)
 
-    -- Interactive button area
-    local ButtonArea = Custom:Create("TextButton", {
-        Text = "",
-        BackgroundTransparency = 1,
-        Size = UDim2.new(1,0,1,0)
-    }, MainFrame)
-
-    -- Toggle frame / box
-    local ControlFrame = Custom:Create("Frame", {
-        Size = Mode == "Toggle" and UDim2.new(0,30,0,15) or UDim2.new(0,20,0,20),
-        Position = UDim2.new(1,-35,0.5,0),
-        AnchorPoint = Vector2.new(1,0.5),
-        BackgroundColor3 = Mode == "Toggle" and Color3.fromRGB(255,255,255) or Color3.fromRGB(70,70,70),
-        BorderSizePixel = 0
-    }, MainFrame)
-    Custom:Create("UICorner",{CornerRadius=UDim.new(0,4)}, ControlFrame)
-
-    local ToggleCircle = nil
-    local UIStroke = nil
-
-    if Mode == "Toggle" then
-        ToggleCircle = Custom:Create("Frame", {
-            Size = UDim2.new(0,14,0,14),
-            BackgroundColor3 = Color3.fromRGB(230,230,230),
-            Position = UDim2.new(0,0,0,0)
-        }, ControlFrame)
-        Custom:Create("UICorner",{CornerRadius=UDim.new(1,0)}, ToggleCircle)
-        UIStroke = Custom:Create("UIStroke",{Color=Color3.fromRGB(255,255,255),Transparency=0.9}, ControlFrame)
+    local function UpdateToggleSize()
+        ToggleContent.TextWrapped = false
+        local Ratio = ToggleContent.TextBounds.X / ToggleContent.AbsoluteSize.X
+        ToggleContent.Size = UDim2.new(1, -100, 0, 12 + (12 * math.ceil(Ratio)))
+        Toggle.Size = UDim2.new(1, 0, 0, ToggleContent.AbsoluteSize.Y + 33)
+        ToggleContent.TextWrapped = true
     end
 
-    -- Animation function
+    UpdateToggleSize()
+    ToggleContent:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
+        UpdateToggleSize()
+        UpdateSizeSection()
+    end)
+
+    local ToggleButton = Custom:Create("TextButton", {
+        Name = "ToggleButton",
+        Font = Enum.Font.SourceSans,
+        Text = "",
+        BackgroundTransparency = 0.999,
+        Size = UDim2.new(1, 0, 1, 0)
+    }, Toggle)
+
+    -- Buat Box / Toggle
+    local FeatureFrame = Custom:Create("Frame", {
+        Name = "FeatureFrame",
+        AnchorPoint = Vector2.new(1, 0.5),
+        BackgroundColor3 = (Mode == "Toggle") and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(0, 0, 0),
+        BackgroundTransparency = (Mode == "Toggle") and 0.92 or 0.3,
+        BorderSizePixel = 0,
+        Position = UDim2.new(1, -15, 0.5, 0),
+        Size = UDim2.new(0, 30, 0, 15)
+    }, Toggle)
+
+    Custom:Create("UICorner", { CornerRadius = UDim.new(0, 4) }, FeatureFrame)
+    local UIStroke = Custom:Create("UIStroke", {
+        Color = Color3.fromRGB(255, 255, 255),
+        Thickness = 2,
+        Transparency = (Mode == "Toggle") and 0.9 or 0.6
+    }, FeatureFrame)
+
+    local ToggleCircle
+    if Mode == "Toggle" then
+        ToggleCircle = Custom:Create("Frame", {
+            Name = "ToggleCircle",
+            BackgroundColor3 = Color3.fromRGB(230, 230, 230),
+            BorderSizePixel = 0,
+            Size = UDim2.new(0, 14, 0, 14),
+            Position = UDim2.new(0, 0, 0, 0)
+        }, FeatureFrame)
+        Custom:Create("UICorner", { CornerRadius = UDim.new(0, 15) }, ToggleCircle)
+    end
+
     local function Animate(Value)
         if Mode == "Toggle" then
-            local circlePos = Value and UDim2.new(0,15,0,0) or UDim2.new(0,0,0,0)
-            local frameColor = Value and Custom.ColorRGB or Color3.fromRGB(255,255,255)
-            local strokeColor = Value and Custom.ColorRGB or Color3.fromRGB(255,255,255)
-            local strokeTrans = Value and 0 or 0.9
-            local tweenInfo = TweenInfo.new(0.2,Enum.EasingStyle.Quad,Enum.EasingDirection.InOut)
-            TweenService:Create(ToggleCircle,tweenInfo,{Position=circlePos}):Play()
-            TweenService:Create(ControlFrame,tweenInfo,{BackgroundColor3=frameColor}):Play()
-            TweenService:Create(UIStroke,tweenInfo,{Color=strokeColor,Transparency=strokeTrans}):Play()
+            local TitleColor = Value and Custom.ColorRGB or Color3.fromRGB(230, 230, 230)
+            local CirclePosition = Value and UDim2.new(0, 15, 0, 0) or UDim2.new(0, 0, 0, 0)
+            local StrokeColor = Value and Custom.ColorRGB or Color3.fromRGB(255, 255, 255)
+            local StrokeTransparency = Value and 0 or 0.9
+            local FrameColor = Value and Custom.ColorRGB or Color3.fromRGB(255, 255, 255)
+            local FrameTransparency = Value and 0 or 0.92
+            local tweenInfo = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
+
+            TweenService:Create(ToggleTitle, tweenInfo, {TextColor3 = TitleColor}):Play()
+            TweenService:Create(ToggleCircle, tweenInfo, {Position = CirclePosition}):Play()
+            TweenService:Create(UIStroke, tweenInfo, {Color = StrokeColor, Transparency = StrokeTransparency}):Play()
+            TweenService:Create(FeatureFrame, tweenInfo, {BackgroundColor3 = FrameColor, BackgroundTransparency = FrameTransparency}):Play()
         else
-            local newColor = Value and Custom.ColorRGB or Color3.fromRGB(70,70,70)
-            TweenService:Create(ControlFrame,TweenInfo.new(0.15),{BackgroundColor3=newColor}):Play()
+            -- Mode Box simple nyala/mati
+            local FrameColor = Value and Custom.ColorRGB or Color3.fromRGB(0,0,0)
+            local Transparency = Value and 0 or 0.3
+            TweenService:Create(FeatureFrame, TweenInfo.new(0.2), {BackgroundColor3 = FrameColor, BackgroundTransparency = Transparency}):Play()
         end
     end
 
-    ButtonArea.Activated:Connect(function()
-        Funcs.Value = not Funcs.Value
-        Funcs:Set(Funcs.Value)
+    ToggleButton.Activated:Connect(function()
+        Funcs_Toggle.Value = not Funcs_Toggle.Value
+        Funcs_Toggle:Set(Funcs_Toggle.Value)
     end)
 
-    function Funcs:Set(Value)
+    function Funcs_Toggle:Set(Value)
         Callback(Value)
         Animate(Value)
     end
 
-    Funcs:Set(Default)
+    Funcs_Toggle:Set(Default)
     ItemCount += 1
-    return Funcs
+    return Funcs_Toggle
 end
-
 
 function Item:AddSlider(Config)
     local Title = Config[1] or Config.Title or ""
