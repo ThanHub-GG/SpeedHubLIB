@@ -951,130 +951,186 @@ local TextLabel1 = Custom:Create("TextLabel", {
    
 local Sections, CountSection = {}, 0
 
-function Sections:AddSection(Title, OpenSection)
-    Title = Title or ""
-    OpenSection = OpenSection or false
-
-    -- Main container
-    local Section = Instance.new("Frame")
-    Section.Name = "Section"
-    Section.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    Section.Size = UDim2.new(1, 0, 0, 40)
-    Section.ClipsDescendants = true
-    Section.LayoutOrder = CountSection
-    Section.Parent = ScrolLayers
-    Instance.new("UICorner", Section).CornerRadius = UDim.new(0, 8)
-
-    -- Header
-    local Header = Instance.new("Frame")
-    Header.Name = "Header"
-    Header.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-    Header.Size = UDim2.new(1, 0, 0, 40)
-    Header.Parent = Section
-    Instance.new("UICorner", Header).CornerRadius = UDim.new(0, 8)
-
-    -- Title
-    local Label = Instance.new("TextLabel")
-    Label.Name = "Title"
-    Label.Text = Title
-    Label.Font = Enum.Font.GothamBold
-    Label.TextSize = 14
-    Label.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Label.BackgroundTransparency = 1
-    Label.Position = UDim2.new(0, 12, 0, 0)
-    Label.Size = UDim2.new(1, -50, 1, 0)
-    Label.TextXAlignment = Enum.TextXAlignment.Left
-    Label.Parent = Header
-
-    -- Arrow
-    local ArrowFrame = Instance.new("Frame")
-    ArrowFrame.Size = UDim2.new(0, 20, 0, 20)
-    ArrowFrame.Position = UDim2.new(1, -20, 0.5, 0)
-    ArrowFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-    ArrowFrame.BackgroundTransparency = 1
-    ArrowFrame.Parent = Header
-
-    local Arrow = Instance.new("ImageLabel")
-    Arrow.Image = "rbxassetid://16851841101"
-    Arrow.BackgroundTransparency = 1
-    Arrow.Rotation = -90
-    Arrow.Size = UDim2.new(1, 6, 1, 6)
-    Arrow.Parent = ArrowFrame
-
-    -- Gradient underline
-    local Underline = Instance.new("Frame")
-    Underline.Size = UDim2.new(0, 0, 0, 3)
-    Underline.Position = UDim2.new(0.5, 0, 1, -2)
-    Underline.AnchorPoint = Vector2.new(0.5, 0)
-    Underline.BackgroundColor3 = Custom.ColorRGB
-    Underline.Parent = Section
-    Instance.new("UICorner", Underline).CornerRadius = UDim.new(0, 2)
-
-    local Gradient = Instance.new("UIGradient")
-    Gradient.Color = ColorSequence.new{
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(20,20,20)),
-        ColorSequenceKeypoint.new(0.5, Custom.ColorRGB),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(20,20,20))
-    }
-    Gradient.Parent = Underline
-
-    -- Content container
-    local Content = Instance.new("Frame")
-    Content.Name = "Content"
-    Content.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    Content.Size = UDim2.new(1, 0, 0, 0)
-    Content.Position = UDim2.new(0, 0, 0, 40)
-    Content.ClipsDescendants = true
-    Content.Parent = Section
-    Instance.new("UICorner", Content).CornerRadius = UDim.new(0, 8)
-    local List = Instance.new("UIListLayout")
-    List.SortOrder = Enum.SortOrder.LayoutOrder
-    List.Padding = UDim.new(0, 4)
-    List.Parent = Content
-
-    -- Toggle function
-    local function Toggle()
-        local totalHeight = 0
-        for _, child in pairs(Content:GetChildren()) do
-            if child:IsA("GuiObject") and child ~= List then
-                totalHeight = totalHeight + child.Size.Y.Offset + 4
-            end
-        end
-
-        if OpenSection then
-            TweenService:Create(ArrowFrame, TweenInfo.new(0.2), {Rotation=-90}):Play()
-            TweenService:Create(Content, TweenInfo.new(0.2), {Size=UDim2.new(1,0,0,0)}):Play()
-            OpenSection = false
-        else
-            TweenService:Create(ArrowFrame, TweenInfo.new(0.2), {Rotation=90}):Play()
-            TweenService:Create(Content, TweenInfo.new(0.2), {Size=UDim2.new(1,0,0,totalHeight)}):Play()
-            OpenSection = true
-        end
-    end
-
-    Header.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            Toggle()
-        end
-    end)
-
-    -- Auto resize scroll
-    local function UpdateScroll()
-        local offset = 0
+    function Sections:AddSection(Title, OpenSection)
+      local Title = Title or ""
+      local OpenSection = OpenSection or false
+  
+      local Section = Custom:Create("Frame", {
+        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+        BackgroundTransparency = 0.999,
+        BorderColor3 = Color3.fromRGB(0, 0, 0),
+        BorderSizePixel = 0,
+        ClipsDescendants = true,
+        LayoutOrder = CountSection,
+        Size = UDim2.new(1, 0, 0, 30),
+        Name = "Section"
+      }, ScrolLayers)
+  
+      local SectionReal = Custom:Create("Frame", {
+        AnchorPoint = Vector2.new(0.5, 0),
+        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+        BackgroundTransparency = 0.935,
+        BorderColor3 = Color3.fromRGB(0, 0, 0),
+        BorderSizePixel = 0,
+        LayoutOrder = 1,
+        Position = UDim2.new(0.5, 0, 0, 0),
+        Size = UDim2.new(1, 1, 0, 30),
+        Name = "SectionReal"
+      }, Section)
+  
+      Custom:Create("UICorner", {
+        CornerRadius = UDim.new(0, 4)
+      }, SectionReal)
+  
+      local SectionButton = Custom:Create("TextButton", {
+        Font = Enum.Font.SourceSans,
+        Text = "",
+        TextColor3 = Color3.fromRGB(0, 0, 0),
+        TextSize = 14,
+        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+        BackgroundTransparency = 0.9990000128746033,
+        BorderColor3 = Color3.fromRGB(0, 0, 0),
+        BorderSizePixel = 0,
+        Size = UDim2.new(1, 0, 1, 0),
+        Name = "SectionButton"
+      }, SectionReal)
+  
+      local FeatureFrame = Custom:Create("Frame", {
+        AnchorPoint = Vector2.new(1, 0.5),
+        BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+        BackgroundTransparency = 0.9990000128746033,
+        BorderColor3 = Color3.fromRGB(0, 0, 0),
+        BorderSizePixel = 0,
+        Position = UDim2.new(1, -5, 0.5, 0),
+        Size = UDim2.new(0, 20, 0, 20),
+        Name = "FeatureFrame"
+      }, SectionReal)
+  
+      local FeatureImg = Custom:Create("ImageLabel", {
+        Image = "rbxassetid://16851841101",
+        AnchorPoint = Vector2.new(0.5, 0.5),
+        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+        BackgroundTransparency = 0.9990000128746033,
+        BorderColor3 = Color3.fromRGB(0, 0, 0),
+        BorderSizePixel = 0,
+        Position = UDim2.new(0.5, 0, 0.5, 0),
+        Rotation = -90,
+        Size = UDim2.new(1, 6, 1, 6),
+        Name = "FeatureImg"
+      }, FeatureFrame)
+  
+      local SectionTitle = Custom:Create("TextLabel", {
+        Font = Enum.Font.GothamBold,
+        Text = Title,
+        TextColor3 = Color3.fromRGB(230, 230, 230),
+        TextSize = 13,
+        TextXAlignment = Enum.TextXAlignment.Left,
+        TextYAlignment = Enum.TextYAlignment.Top,
+        AnchorPoint = Vector2.new(0, 0.5),
+        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+        BackgroundTransparency = 0.9990000128746033,
+        BorderColor3 = Color3.fromRGB(0, 0, 0),
+        BorderSizePixel = 0,
+        Position = UDim2.new(0, 10, 0.5, 0),
+        Size = UDim2.new(1, -50, 0, 13),
+        Name = "SectionTitle"
+      }, SectionReal)
+  
+      local SectionDecideFrame = Custom:Create("Frame", {
+        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+        BorderColor3 = Color3.fromRGB(0, 0, 0),
+        BorderSizePixel = 0,
+        AnchorPoint = Vector2.new(0.5, 0),
+        Position = UDim2.new(0.5, 0, 0, 33),
+        Size = UDim2.new(0, 0, 0, 2),
+        Name = "SectionDecideFrame"
+      }, Section)
+      Custom:Create("UICorner", {}, SectionDecideFrame)
+      Custom:Create("UIGradient", {
+        Color = ColorSequence.new{
+          ColorSequenceKeypoint.new(0, Color3.fromRGB(20, 20, 20)),
+          ColorSequenceKeypoint.new(0.5, Custom.ColorRGB),
+          ColorSequenceKeypoint.new(1, Color3.fromRGB(20, 20, 20))
+        }
+      }, SectionDecideFrame)
+  
+      local SectionAdd = Custom:Create("Frame", {
+        AnchorPoint = Vector2.new(0.5, 0),
+        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+        BackgroundTransparency = 0.9990000128746033,
+        BorderColor3 = Color3.fromRGB(0, 0, 0),
+        BorderSizePixel = 0,
+        ClipsDescendants = true,
+        LayoutOrder = 1,
+        Position = UDim2.new(0.5, 0, 0, 38),
+        Size = UDim2.new(1, 0, 0, 100),
+        Name = "SectionAdd"
+      }, Section)
+  
+      Custom:Create("UICorner", {
+        CornerRadius = UDim.new(0, 2)
+      }, SectionAdd)
+    
+      Custom:Create("UIListLayout", {
+        Padding = UDim.new(0, 3),
+        SortOrder = Enum.SortOrder.LayoutOrder
+      }, SectionAdd)
+  
+      local function UpdateSizeScroll()
+        local OffsetY = 0
+  
         for _, child in pairs(ScrolLayers:GetChildren()) do
-            if child:IsA("GuiObject") then
-                offset = offset + child.Size.Y.Offset + 4
-            end
+          if child.Name ~= "UIListLayout" then
+            OffsetY = OffsetY + 3 + child.Size.Y.Offset
+          end
         end
-        ScrolLayers.CanvasSize = UDim2.new(0,0,0,offset)
-    end
+        
+        ScrolLayers.CanvasSize = UDim2.new(0, 0, 0, OffsetY)
+      end
+    
+      local function UpdateSizeSection()
+        if OpenSection then
+          local SectionSizeYWitdh = 38
+  
+          for _, v in pairs(SectionAdd:GetChildren()) do
+            if v.Name ~= "UIListLayout" and v.Name ~= "UICorner" then
+              SectionSizeYWitdh = SectionSizeYWitdh + v.Size.Y.Offset + 3
+            end
+          end
+    
+          TweenService:Create(FeatureFrame, TweenInfo.new(0.1), {Rotation = 90}):Play()
+          TweenService:Create(Section, TweenInfo.new(0.1), {Size = UDim2.new(1, 1, 0, SectionSizeYWitdh)}):Play()
+          TweenService:Create(SectionAdd, TweenInfo.new(0.1), {Size = UDim2.new(1, 0, 0, SectionSizeYWitdh - 38)}):Play()
+          TweenService:Create(SectionDecideFrame, TweenInfo.new(0.1), {Size = UDim2.new(1, 0, 0, 2)}):Play()
+            
+          task.wait(0.5)
+          UpdateSizeScroll()
+        end
+      end
+    
+      local function ToggleSection()
+        CircleClick(SectionButton, Player:GetMouse().X, Player:GetMouse().Y)
+        
+        if OpenSection then
+          TweenService:Create(FeatureFrame, TweenInfo.new(0.1), {Rotation = 0}):Play()
+          TweenService:Create(Section, TweenInfo.new(0.1), {Size = UDim2.new(1, 1, 0, 30)}):Play()
+          TweenService:Create(SectionDecideFrame, TweenInfo.new(0.1), {Size = UDim2.new(0, 0, 0, 2)}):Play()
+    
+          OpenSection = false
+          task.wait(0.1)
+          UpdateSizeScroll()
+        else
+          OpenSection = true
+          UpdateSizeSection()
+        end
+      end
+    
+      SectionButton.Activated:Connect(ToggleSection)
+      SectionAdd.ChildAdded:Connect(UpdateSizeSection)
+      SectionAdd.ChildRemoved:Connect(UpdateSizeSection)
+    
+      UpdateSizeScroll()
 
-    Content.ChildAdded:Connect(UpdateScroll)
-    Content.ChildRemoved:Connect(UpdateScroll)
-    UpdateScroll()
-
-    CountSection = CountSection + 1
-end
       local Item, ItemCount = {}, 0
       function Item:AddParagraph(Config)
         local Title = Config[1] or Config.Title or ""
