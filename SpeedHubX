@@ -1282,58 +1282,59 @@ function Item:AddButton(Config)
 
     local Button = Custom:Create("Frame", {
         Name = "Button",
-        BackgroundColor3 = Color3.fromRGB(35, 35, 35),
+        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+        BackgroundTransparency = 0.935,
         BorderSizePixel = 0,
         LayoutOrder = ItemCount,
         Size = UDim2.new(1, 0, 0, 35)
     }, SectionAdd)
 
-    Custom:Create("UICorner", { CornerRadius = UDim.new(0, 6) }, Button)
+    Custom:Create("UICorner", { CornerRadius = UDim.new(0, 4) }, Button)
 
     local ButtonTitle = Custom:Create("TextLabel", {
         Name = "ButtonTitle",
         Font = Enum.Font.GothamBold,
         Text = Title,
-        TextSize = 14,
-        TextColor3 = Color3.fromRGB(230, 230, 230),
+        TextSize = 13,
+        TextColor3 = Color3.fromRGB(231, 231, 231),
         TextXAlignment = Enum.TextXAlignment.Left,
         TextYAlignment = Enum.TextYAlignment.Top,
-        BackgroundTransparency = 1,
-        Position = UDim2.new(0, 10, 0, 6),
-        Size = UDim2.new(1, -60, 0, 14)
+        BackgroundTransparency = 0.999,
+        Position = UDim2.new(0, 10, 0, 10),
+        Size = UDim2.new(1, -100, 0, 13)
     }, Button)
 
     local ButtonContent = Custom:Create("TextLabel", {
         Name = "ButtonContent",
-        Font = Enum.Font.Gotham,
+        Font = Enum.Font.GothamBold,
         Text = Content,
         TextSize = 12,
-        TextColor3 = Color3.fromRGB(200, 200, 200),
+        TextColor3 = Color3.fromRGB(255, 255, 255),
         TextTransparency = 0.6,
         TextXAlignment = Enum.TextXAlignment.Left,
-        TextYAlignment = Enum.TextYAlignment.Top,
-        BackgroundTransparency = 1,
-        Position = UDim2.new(0, 10, 0, 22),
-        Size = UDim2.new(1, -60, 0, 12)
+        TextYAlignment = Enum.TextYAlignment.Bottom,
+        BackgroundTransparency = 0.999,
+        Position = UDim2.new(0, 10, 0, 23),
+        Size = UDim2.new(1, -100, 0, 12)
     }, Button)
 
     local FeatureFrame = Custom:Create("Frame", {
         Name = "FeatureFrame",
         AnchorPoint = Vector2.new(1, 0.5),
         BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-        BackgroundTransparency = 0.3,
+        BackgroundTransparency = 0.999,
         BorderSizePixel = 0,
         Position = UDim2.new(1, -15, 0.5, 0),
         Size = UDim2.new(0, 28, 0, 28)
     }, Button)
 
-    Custom:Create("UICorner", { CornerRadius = UDim.new(0, 6) }, FeatureFrame)
+    Custom:Create("UICorner", { CornerRadius = UDim.new(0, 4) }, FeatureFrame)
 
     local FeatureImg = Custom:Create("ImageLabel", {
         Name = "FeatureImg",
         Image = Icon,
         AnchorPoint = Vector2.new(0.5, 0.5),
-        BackgroundTransparency = 1,
+        BackgroundTransparency = 0.999,
         Position = UDim2.new(0.5, 0, 0.5, 0),
         Size = UDim2.new(0.7, 0, 0.7, 0)
     }, FeatureFrame)
@@ -1345,20 +1346,20 @@ function Item:AddButton(Config)
         Text = ""
     }, Button)
 
-    -- Hover effect
+    -- Hover effect (sedikit lebih gelap tapi masih semi transparan)
     ButtonClickArea.MouseEnter:Connect(function()
-        TweenService:Create(Button, TweenInfo.new(0.15, Enum.EasingStyle.Quad), {BackgroundColor3 = Color3.fromRGB(50, 50, 50)}):Play()
+        TweenService:Create(Button, TweenInfo.new(0.15, Enum.EasingStyle.Quad), {BackgroundTransparency = 0.85}):Play()
     end)
     ButtonClickArea.MouseLeave:Connect(function()
-        TweenService:Create(Button, TweenInfo.new(0.15, Enum.EasingStyle.Quad), {BackgroundColor3 = Color3.fromRGB(35, 35, 35)}):Play()
+        TweenService:Create(Button, TweenInfo.new(0.15, Enum.EasingStyle.Quad), {BackgroundTransparency = 0.935}):Play()
     end)
 
     -- Click animation
     ButtonClickArea.Activated:Connect(function()
         CircleClick(ButtonClickArea, Player:GetMouse().X, Player:GetMouse().Y)
-        TweenService:Create(Button, TweenInfo.new(0.1, Enum.EasingStyle.Quad), {BackgroundColor3 = Color3.fromRGB(80, 80, 80)}):Play()
+        TweenService:Create(Button, TweenInfo.new(0.1, Enum.EasingStyle.Quad), {BackgroundTransparency = 0.75}):Play()
         task.delay(0.1, function()
-            TweenService:Create(Button, TweenInfo.new(0.15, Enum.EasingStyle.Quad), {BackgroundColor3 = Color3.fromRGB(35, 35, 35)}):Play()
+            TweenService:Create(Button, TweenInfo.new(0.15, Enum.EasingStyle.Quad), {BackgroundTransparency = 0.935}):Play()
         end)
         Callback()
     end)
