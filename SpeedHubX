@@ -174,98 +174,113 @@ end
 
 local Speed_Library, Notification = {}, {}
 Speed_Library.Unloaded = false
-function Speed_Library:SetNotification(Config)
+
+-- Stackable notifications table
+local ActiveNotifications = {}
+
+function Speed_Library:SetNotification(Config, ParentFrame)
     local Title = Config[1] or Config.Title or "Notification"
     local Description = Config[2] or Config.Description or ""
     local Content = Config[3] or Config.Content or ""
     local Time = Config[5] or Config.Time or 0.5
-    local Delay = Config[6] or Config.Delay or 4
+    local Delay = Config[6] or Config.Delay or 5
 
-    local NotificationGui = Instance.new("ScreenGui")
-    NotificationGui.Name = "NotificationGui"
-    NotificationGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    NotificationGui.Parent = game:GetService("CoreGui")
+    -- ParentFrame: harus Frame target untuk notif
+    local Target = ParentFrame or error("Parent Frame is required!")
 
+    -- Layout container di dalam Frame target
+    local NotificationLayout = Instance.new("Frame")
+    NotificationLayout.Name = "NotificationLayout"
+    NotificationLayout.BackgroundTransparency = 1
+    NotificationLayout.Size = UDim2.new(1,0,1,0)
+    NotificationLayout.ClipsDescendants = true
+    NotificationLayout.Parent = Target
+
+    -- Hitung posisi stack
+    local Count = #ActiveNotifications
+    local NotificationHeight = 80
+    local Offset = (NotificationHeight + 12) * Count
+
+    -- Notification Frame
     local NotificationFrame = Instance.new("Frame")
-    NotificationFrame.AnchorPoint = Vector2.new(1, 0)
-    NotificationFrame.Position = UDim2.new(1, 400, 0, 50)
-    NotificationFrame.Size = UDim2.new(0, 300, 0, 80)
-    NotificationFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    NotificationFrame.BackgroundTransparency = 0.1
+    NotificationFrame.Size = UDim2.new(1, 0, 0, NotificationHeight)
+    NotificationFrame.Position = UDim2.new(0, 0, 0, Offset)
+    NotificationFrame.BackgroundColor3 = Color3.fromRGB(30,30,30)
     NotificationFrame.BorderSizePixel = 0
-    NotificationFrame.Parent = NotificationGui
     NotificationFrame.ClipsDescendants = true
+    NotificationFrame.Parent = NotificationLayout
 
     local UICorner = Instance.new("UICorner")
-    UICorner.CornerRadius = UDim.new(0, 12)
+    UICorner.CornerRadius = UDim.new(0,8)
     UICorner.Parent = NotificationFrame
-
-    -- Shadow
-    local DropShadow = Instance.new("ImageLabel")
-    DropShadow.Image = "rbxassetid://6015897843"
-    DropShadow.ScaleType = Enum.ScaleType.Slice
-    DropShadow.SliceCenter = Rect.new(49, 49, 450, 450)
-    DropShadow.ImageColor3 = Color3.fromRGB(0,0,0)
-    DropShadow.ImageTransparency = 0.7
-    DropShadow.BackgroundTransparency = 1
-    DropShadow.Size = UDim2.new(1, 30, 1, 30)
-    DropShadow.Position = UDim2.new(0, -15, 0, -15)
-    DropShadow.Parent = NotificationFrame
-
-    -- Close button
-    local Close = Instance.new("TextButton")
-    Close.Size = UDim2.new(0, 20, 0, 20)
-    Close.Position = UDim2.new(1, -25, 0, 5)
-    Close.BackgroundTransparency = 1
-    Close.Text = "✕"
-    Close.TextColor3 = Color3.fromRGB(200, 200, 200)
-    Close.Font = Enum.Font.GothamBold
-    Close.TextSize = 14
-    Close.Parent = NotificationFrame
 
     -- Title
     local TitleLabel = Instance.new("TextLabel")
     TitleLabel.Text = Title
     TitleLabel.Font = Enum.Font.GothamBold
-    TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    TitleLabel.TextSize = 16
-    TitleLabel.Position = UDim2.new(0, 15, 0, 10)
-    TitleLabel.Size = UDim2.new(1, -40, 0, 20)
+    TitleLabel.TextColor3 = Color3.fromRGB(255,255,255)
+    TitleLabel.TextSize = 14
+    TitleLabel.Position = UDim2.new(0,10,0,5)
+    TitleLabel.Size = UDim2.new(1,-40,0,20)
     TitleLabel.BackgroundTransparency = 1
     TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
     TitleLabel.Parent = NotificationFrame
 
-    -- Description
+    -- Description / Content
     local DescLabel = Instance.new("TextLabel")
-    DescLabel.Text = Description
+    DescLabel.Text = Description.."\n"..Content
     DescLabel.Font = Enum.Font.Gotham
-    DescLabel.TextColor3 = Color3.fromRGB(180, 180, 180)
-    DescLabel.TextSize = 14
-    DescLabel.Position = UDim2.new(0, 15, 0, 35)
-    DescLabel.Size = UDim2.new(1, -20, 0, 40)
+    DescLabel.TextColor3 = Color3.fromRGB(200,200,200)
+    DescLabel.TextSize = 13
+    DescLabel.Position = UDim2.new(0,10,0,25)
+    DescLabel.Size = UDim2.new(1,-20,0,50)
     DescLabel.BackgroundTransparency = 1
-    DescLabel.TextXAlignment = Enum.TextXAlignment.Left
     DescLabel.TextWrapped = true
+    DescLabel.TextXAlignment = Enum.TextXAlignment.Left
     DescLabel.Parent = NotificationFrame
 
-    -- Animasi slide in
-    local tweenIn = TweenService:Create(NotificationFrame, TweenInfo.new(Time, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Position = UDim2.new(1, -30, 0, 50)})
-    tweenIn:Play()
+    -- Close button
+    local Close = Instance.new("TextButton")
+    Close.Size = UDim2.new(0,20,0,20)
+    Close.Position = UDim2.new(1,-25,0,5)
+    Close.BackgroundTransparency = 1
+    Close.Text = "✕"
+    Close.TextColor3 = Color3.fromRGB(200,200,200)
+    Close.Font = Enum.Font.GothamBold
+    Close.TextSize = 14
+    Close.Parent = NotificationFrame
 
-    -- Close function
     local function CloseNotif()
-        local tweenOut = TweenService:Create(NotificationFrame, TweenInfo.new(Time, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {Position = UDim2.new(1, 400, 0, 50)})
-        tweenOut:Play()
-        tweenOut.Completed:Wait()
-        NotificationGui:Destroy()
+        -- Hapus notif dari ActiveNotifications
+        for i, v in ipairs(ActiveNotifications) do
+            if v == NotificationFrame then
+                table.remove(ActiveNotifications,i)
+                break
+            end
+        end
+        -- Tween slide out
+        local tween = game:GetService("TweenService"):Create(NotificationFrame, TweenInfo.new(Time, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {Position=UDim2.new(1,0,0,Offset)})
+        tween:Play()
+        tween.Completed:Wait()
+        NotificationFrame:Destroy()
+
+        -- Reposisi notif lain
+        for i, v in ipairs(ActiveNotifications) do
+            local targetPos = UDim2.new(0,0,0,(NotificationHeight+12)*(i-1))
+            game:GetService("TweenService"):Create(v, TweenInfo.new(Time, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Position=targetPos}):Play()
+        end
     end
 
     Close.Activated:Connect(CloseNotif)
-
-    -- Auto close
     task.delay(Delay, CloseNotif)
-end
 
+    -- Slide in anim
+    NotificationFrame.Position = UDim2.new(1,0,0,Offset)
+    game:GetService("TweenService"):Create(NotificationFrame, TweenInfo.new(Time, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Position=UDim2.new(0,0,0,Offset)}):Play()
+
+    -- Tambah ke stack
+    table.insert(ActiveNotifications,NotificationFrame)
+end
 
 function Speed_Library:CreateWindow(Config)
   local Title = Config[1] or Config.Title or ""
