@@ -102,10 +102,11 @@ local UserInputService = game:GetService("UserInputService")
 
 local function MakeDraggable(topbarObject, object)
     local dragging = false
-    local dragStart = nil
-    local startPos = nil
+    local dragStart
+    local startPos
     local targetPos = object.Position
-    local smoothness = 0.15 -- 0.1-0.3, semakin kecil semakin cepat
+    local smoothness = 0.15
+    local releaseTweenTime = 0.25 -- waktu slide saat dilepas
 
     local function UpdateTarget(input)
         local delta = input.Position - dragStart
@@ -124,6 +125,10 @@ local function MakeDraggable(topbarObject, object)
             input.Changed:Connect(function()
                 if input.UserInputState == Enum.UserInputState.End then
                     dragging = false
+
+                    -- Tween kecil untuk slide smooth saat dilepas
+                    local tween = TweenService:Create(object, TweenInfo.new(releaseTweenTime, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Position = targetPos})
+                    tween:Play()
                 end
             end)
         end
@@ -141,13 +146,15 @@ local function MakeDraggable(topbarObject, object)
         end
     end)
 
-    -- RenderStepped update untuk smooth lerp
+    -- RenderStepped update untuk smooth lerp saat drag
     RunService.RenderStepped:Connect(function()
-        object.Position = object.Position:Lerp(targetPos, smoothness)
+        if dragging then
+            object.Position = object.Position:Lerp(targetPos, smoothness)
+        end
     end)
 end
 
--- Gunakan:
+-- Contoh pakai
 MakeDraggable(Open_Close, Open_Close)
 
 function CircleClick(Button, X, Y)
