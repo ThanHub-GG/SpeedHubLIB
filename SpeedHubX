@@ -1870,6 +1870,7 @@ function Item:AddDropdown(Config)
 
     local Funcs_Dropdown = {Value = Default, Options = Options}
 
+    -- Dropdown Frame
     local Dropdown = Custom:Create("Frame", {
         BackgroundColor3 = Color3.fromRGB(30,30,30),
         BackgroundTransparency = 0.05,
@@ -1886,7 +1887,7 @@ function Item:AddDropdown(Config)
         Name = "ToggleButton"
     }, Dropdown)
 
-    Custom:Create("UICorner", {CornerRadius = UDim.new(0, 4)}, Dropdown)
+    Custom:Create("UICorner", {CornerRadius = UDim.new(0,4)}, Dropdown)
 
     local DropdownTitle = Custom:Create("TextLabel", {
         Font = Enum.Font.GothamBold,
@@ -1896,8 +1897,8 @@ function Item:AddDropdown(Config)
         TextXAlignment = Enum.TextXAlignment.Left,
         TextYAlignment = Enum.TextYAlignment.Center,
         BackgroundTransparency = 1,
-        Position = UDim2.new(0, 10, 0, 8),
-        Size = UDim2.new(1, -20, 0, 13),
+        Position = UDim2.new(0,10,0,8),
+        Size = UDim2.new(1,-20,0,13),
         Name = "DropdownTitle"
     }, Dropdown)
 
@@ -1909,26 +1910,29 @@ function Item:AddDropdown(Config)
         TextXAlignment = Enum.TextXAlignment.Left,
         TextYAlignment = Enum.TextYAlignment.Center,
         BackgroundTransparency = 1,
-        Position = UDim2.new(0, 10, 0, 23),
-        Size = UDim2.new(1, -20, 0, 12),
+        Position = UDim2.new(0,10,0,23),
+        Size = UDim2.new(1,-20,0,12),
         Name = "OptionSelecting",
         Parent = Dropdown
     })
 
-    local ScrollSelect = Custom:Create("ScrollingFrame", {
-        CanvasSize = UDim2.new(0,0,0,0),
-        ScrollBarThickness = 0,
-        BackgroundTransparency = 1,
+    local ScrollSelect = Custom:Create("Frame", {
+        BackgroundColor3 = Color3.fromRGB(30,30,30),
+        BackgroundTransparency = 0,
         BorderSizePixel = 0,
-        Size = UDim2.new(1,0,0,100),
-        Visible = false,
-        Name = "ScrollSelect"
-    }, Dropdown)
+        Size = UDim2.new(1,0,0,0),
+        Position = UDim2.new(0,0,1,0),
+        ClipsDescendants = true,
+        Name = "ScrollSelect",
+        Parent = Dropdown
+    })
 
     Custom:Create("UIListLayout", {Padding = UDim.new(0,3), SortOrder = Enum.SortOrder.LayoutOrder}, ScrollSelect)
 
     local DropCount = 0
+    local Opened = false
 
+    -- Clear semua opsi
     function Funcs_Dropdown:Clear()
         for _, DropFrame in pairs(ScrollSelect:GetChildren()) do
             if DropFrame.Name == "Option" then
@@ -1939,6 +1943,7 @@ function Item:AddDropdown(Config)
         OptionSelecting.Text = "Select Options"
     end
 
+    -- Set pilihan yang dipilih
     function Funcs_Dropdown:Set(Value)
         Funcs_Dropdown.Value = Value or Funcs_Dropdown.Value
         local DropdownValueTable = table.concat(Funcs_Dropdown.Value, ", ")
@@ -1946,9 +1951,11 @@ function Item:AddDropdown(Config)
         Callback(Funcs_Dropdown.Value)
     end
 
+    -- Tambah opsi
     function Funcs_Dropdown:AddOption(OptionName)
         local Option = Custom:Create("Frame", {
-            BackgroundTransparency = 0.05,
+            BackgroundColor3 = Color3.fromRGB(50,50,50),
+            BackgroundTransparency = 0.1,
             BorderSizePixel = 0,
             LayoutOrder = DropCount,
             Size = UDim2.new(1,0,0,25),
@@ -1987,7 +1994,7 @@ function Item:AddDropdown(Config)
                 else
                     for i,v in ipairs(Funcs_Dropdown.Value) do
                         if v == OptionName then
-                            table.remove(Funcs_Dropdown.Value, i)
+                            table.remove(Funcs_Dropdown.Value,i)
                             break
                         end
                     end
@@ -1999,15 +2006,30 @@ function Item:AddDropdown(Config)
         end)
 
         DropCount += 1
+
+        -- Update tinggi frame
+        local layout = ScrollSelect:FindFirstChildOfClass("UIListLayout")
+        local totalHeight = layout.AbsoluteContentSize.Y
+        ScrollSelect.Size = UDim2.new(1,0,0,totalHeight)
+        Dropdown.Size = UDim2.new(1,0,0,35+totalHeight)
     end
 
+    -- Refresh daftar opsi
     function Funcs_Dropdown:Refresh(List)
         List = List or {}
         Funcs_Dropdown:Clear()
         for _, Option in ipairs(List) do
             Funcs_Dropdown:AddOption(Option)
         end
+        Funcs_Dropdown.Options = List
+        Funcs_Dropdown:Set(Funcs_Dropdown.Value)
     end
+
+    -- Toggle dropdown
+    DropdownButton.Activated:Connect(function()
+        Opened = not Opened
+        ScrollSelect.Visible = Opened
+    end)
 
     Funcs_Dropdown:Refresh(Options)
     ItemCount += 1
