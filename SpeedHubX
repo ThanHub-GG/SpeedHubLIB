@@ -2124,21 +2124,18 @@ end)
             Name = "OptionButton"
           }, Option)
   
-          Custom:Create("TextLabel", {
-            Font = Enum.Font.GothamBold,
-            Text = OptionName,
-            TextSize = 13,
-            TextColor3 = Color3.fromRGB(230, 230, 230),
-            TextXAlignment = Enum.TextXAlignment.Left,
-            TextYAlignment = Enum.TextYAlignment.Top,
-            BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-            BackgroundTransparency = 0.999,
-            BorderColor3 = Color3.fromRGB(0, 0, 0),
-            BorderSizePixel = 0,
-            Position = UDim2.new(0, 8, 0, 8),
-            Size = UDim2.new(1, -100, 0, 13),
-            Name = "OptionText"
-          }, Option)
+Option.OptionText = Custom:Create("TextLabel", {
+    Font = Enum.Font.GothamBold,
+    Text = OptionName,
+    TextSize = 13,
+    TextColor3 = Color3.fromRGB(230, 230, 230),
+    TextXAlignment = Enum.TextXAlignment.Left,
+    TextYAlignment = Enum.TextYAlignment.Top,
+    BackgroundTransparency = 1,
+    Position = UDim2.new(0, 8, 0, 8),
+    Size = UDim2.new(1, -100, 0, 13),
+}, Option)
+
   
           local ChooseFrame = Custom:Create("Frame", {
             AnchorPoint = Vector2.new(0, 0.5),
