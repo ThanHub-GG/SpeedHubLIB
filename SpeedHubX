@@ -907,11 +907,11 @@ local ConnectButton = Custom:Create("TextButton", {
 			Parent = LayersFolder
 		})
 
-    Custom:Create("UIListLayout", {
-      Padding = UDim.new(0, 4),
-      SortOrder = Enum.SortOrder.LayoutOrder,
-      Parent = ScrolLayers
-    })
+	Custom:Create("UIListLayout", {
+	  Padding = UDim.new(0, 10), -- jarak antar tab
+	  SortOrder = Enum.SortOrder.LayoutOrder,
+	  Parent = ScrolLayers
+	})
 
     local Tab = Custom:Create("Frame", {
 			BackgroundColor3 = CountTab == 0 and Custom.FrameDark or Custom.BackgroundDark,
@@ -923,6 +923,12 @@ local ConnectButton = Custom:Create("TextButton", {
 			Name = "Tab",
 			Parent = ScrollTab
 		})
+
+	Custom:Create("UIPadding", {
+    PaddingTop = UDim.new(0, 5),
+    PaddingBottom = UDim.new(0, 5),
+    Parent = Tab
+	})
 
     Custom:Create("UICorner", {
       CornerRadius = UDim.new(0, 8),
