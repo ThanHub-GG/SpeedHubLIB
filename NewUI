@@ -260,11 +260,11 @@ function Speed_Library:SetNotification(Config)
 
     -- Modern gradient for notifications
     Custom:Create("UIGradient", {
-        Color = ColorSequence.new{
-            ColorSequenceKeypoint.new(0, Custom.BackgroundDark),
-            ColorSequenceKeypoint.new(0.5, Custom.FrameDark),
-            ColorSequence.new(1, Custom.AccentColor)
-        },
+	Color = ColorSequence.new{
+	    ColorSequenceKeypoint.new(0, Custom.BackgroundDark),
+	    ColorSequenceKeypoint.new(0.5, Custom.FrameDark),
+	    ColorSequenceKeypoint.new(1, Custom.AccentColor)
+	},
         Rotation = 135,
     }, NotificationFrameReal)
 
