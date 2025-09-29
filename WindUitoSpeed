@@ -20,10 +20,10 @@ end
 local Custom = {} do
     -- SKEMA WARNA HYBRID (Ungu-Biru-Merah)
     Custom.ColorRGB = Color3.fromRGB(138, 43, 226)      -- UNGU (Aksen Utama)
-    Custom.AccentColor = Color3.fromRGB(0, 191, 255)    -- BIRU CERAH (Aksen Gradient & Latar Item)
+    Custom.AccentColor = Color3.fromRGB(0, 191, 255)    -- BIRU CERAH (Latar Item)
     Custom.DarkBlue = Color3.fromRGB(255, 69, 0)        -- MERAH ORANGE (Warna Kontras)
     Custom.BackgroundDark = Color3.fromRGB(10, 10, 15)  -- LATAR BELAKANG SANGAT GELAP
-    Custom.FrameDark = Color3.fromRGB(25, 25, 35)       -- FRAME GELAP (Latar Panel)
+    Custom.FrameDark = Color3.fromRGB(25, 25, 35)       -- FRAME GELAP (Latar Panel & Input Box)
 
     function Custom:Create(Name, Properties, Parent)
         local _instance = Instance.new(Name)
@@ -817,8 +817,8 @@ function Speed_Library:CreateWindow(Config)
         if MoreBlur.Visible then
             local tweenInfo = TweenInfo.new(0.2)
 
-            local _Hide = TweenService:Create(MoreBlur, tweenInfo, {BackgroundTransparency = 0.999})
-            local _Move = TweenService:Create(DropdownSelect, tweenInfo, {Position = UDim2.new(1, 172, 0.5, 0)})
+            local _Hide = TweenService:Create(MoreBlur, tweenInfo, {BackgroundTransparency = 0.7})
+            local _Move = TweenService:Create(DropdownSelect, tweenInfo, {Position = UDim2.new(1, -11, 0.5, 0)})
 
             _Hide:Play()
             _Move:Play()
@@ -1058,7 +1058,7 @@ function Speed_Library:CreateWindow(Config)
                 TweenService:Create(FrameChoose, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Size = UDim2.new(0, 4, 1, 0)}):Play()
     
                 task.wait(0.2)
-                TweenService:Create(FrameChoose, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Size = UDim2.new(0, 2, 1, 0)}):Play()
+                TweenService:Create(FrameChoose, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = UDim2.new(0, 2, 1, 0)}):Play()
             end
         end)
 
@@ -1292,8 +1292,8 @@ function Item:AddParagraph(Config)
     local SettingFuncs = {}
 
     local Paragraph = Custom:Create("Frame", {
-        BackgroundColor3 = Custom.AccentColor, -- MODIFIKASI: Menggunakan AccentColor (Biru)
-        BackgroundTransparency = 0.85, -- MODIFIKASI: 0.85 untuk kontras yang jelas
+        BackgroundColor3 = Custom.AccentColor, -- Biru Transparan
+        BackgroundTransparency = 0.85, 
         BorderSizePixel = 0,
         LayoutOrder = ItemCount,
         Size = UDim2.new(1, 0, 0, 35),
@@ -1305,7 +1305,9 @@ function Item:AddParagraph(Config)
     local ParagraphTitle = Custom:Create("TextLabel", {
         Font = Enum.Font.GothamBold,
         Text = Title,
-        TextColor3 = Color3.fromRGB(231, 231, 231),
+        TextColor3 = Color3.fromRGB(255, 255, 255), -- Putih nyala
+        TextStrokeColor3 = Color3.fromRGB(20, 20, 20), -- Garis tepi gelap untuk efek menyala
+        TextStrokeTransparency = 0.7, 
         TextSize = 13,
         TextXAlignment = Enum.TextXAlignment.Left,
         TextYAlignment = Enum.TextYAlignment.Top,
@@ -1314,6 +1316,13 @@ function Item:AddParagraph(Config)
         Size = UDim2.new(1, -16, 0, 13),
         Name = "ParagraphTitle",
     }, Paragraph)
+    
+    Custom:Create("UIStroke", {
+        Color = Color3.fromRGB(255, 255, 255),
+        Thickness = 0.2, -- Sedikit saja
+        Transparency = 0.5,
+    }, ParagraphTitle)
+
 
     local ParagraphContent = Custom:Create("TextLabel", {
         Font = Enum.Font.GothamBold,
@@ -1329,6 +1338,12 @@ function Item:AddParagraph(Config)
         Name = "ParagraphContent",
         RichText = true 
     }, Paragraph)
+    
+    Custom:Create("UIStroke", {
+        Color = Custom.ColorRGB,
+        Thickness = 0.2, 
+        Transparency = 0.6,
+    }, ParagraphContent)
 
     local function UpdateParagraphSize()
         ParagraphContent.TextWrapped = false
@@ -1371,8 +1386,8 @@ end
         local Sep_Funcs = {}
 
         local Seperator = Custom:Create("Frame", {
-          BackgroundColor3 = Custom.AccentColor, -- MODIFIKASI: Menggunakan AccentColor (Biru)
-          BackgroundTransparency = 0.85, -- MODIFIKASI: 0.85
+          BackgroundColor3 = Custom.AccentColor, -- Biru Transparan
+          BackgroundTransparency = 0.85, 
           BorderColor3 = Color3.fromRGB(0, 0, 0),
           BorderSizePixel = 1,
           LayoutOrder = ItemCount,
@@ -1383,19 +1398,24 @@ end
         local SeperatorTitle = Custom:Create("TextLabel", {
           Font = Enum.Font.GothamBold,
           Text = Title,
-          TextColor3 = Color3.fromRGB(231, 231, 231),
-          TextStrokeColor3 = Color3.fromRGB(0, 0, 0),
-          TextStrokeTransparency = 0.8,
+          TextColor3 = Color3.fromRGB(255, 255, 255), -- Putih nyala
+          TextStrokeColor3 = Color3.fromRGB(20, 20, 20),
+          TextStrokeTransparency = 0.7,
           TextSize = 14,
           TextXAlignment = Enum.TextXAlignment.Left,
           TextYAlignment = Enum.TextYAlignment.Center,
-          BackgroundColor3 = Color3.fromRGB(255, 255, 255),
           BackgroundTransparency = 1,
           BorderSizePixel = 0,
           Position = UDim2.new(0, 12, 0, 0),
           Size = UDim2.new(1, -16, 1, 0),
           Name = "SeperatorTitle",
         }, Seperator)
+        
+        Custom:Create("UIStroke", {
+            Color = Color3.fromRGB(255, 255, 255),
+            Thickness = 0.2, 
+            Transparency = 0.5,
+        }, SeperatorTitle)
         
         Custom:Create("UICorner", {
           CornerRadius = UDim.new(0, 4), 
@@ -1423,7 +1443,7 @@ end
         local LineFuncs = {}
     
         local Line = Custom:Create("Frame", {
-          BackgroundColor3 = Custom.AccentColor, -- MODIFIKASI: Menggunakan AccentColor (Biru)
+          BackgroundColor3 = Custom.AccentColor, -- Biru Transparan
           BackgroundTransparency = 0.7, 
           BorderSizePixel = 0,
           LayoutOrder = ItemCount,
@@ -1454,8 +1474,8 @@ end
 
         local Button = Custom:Create("Frame", {
 					Name = "Button",
-					BackgroundColor3 = Custom.AccentColor, -- MODIFIKASI: Menggunakan AccentColor (Biru)
-					BackgroundTransparency = 0.85, -- MODIFIKASI: 0.85
+					BackgroundColor3 = Custom.AccentColor, -- Biru Transparan
+					BackgroundTransparency = 0.85, 
 					BorderSizePixel = 0,
 					LayoutOrder = ItemCount,
 					Size = UDim2.new(1, 0, 0, 35)
@@ -1465,20 +1485,27 @@ end
           CornerRadius = UDim.new(0, 4) 
         }, Button)
 
-        Custom:Create("TextLabel", {
+        local ButtonTitle = Custom:Create("TextLabel", {
 					Name = "ButtonTitle",
 					Font = Enum.Font.GothamBold,
 					Text = Title,
-					TextColor3 = Color3.fromRGB(231, 231, 231),
+					TextColor3 = Color3.fromRGB(255, 255, 255), -- Putih nyala
+                    TextStrokeColor3 = Color3.fromRGB(20, 20, 20),
+                    TextStrokeTransparency = 0.7,
 					TextSize = 13,
 					TextXAlignment = Enum.TextXAlignment.Left,
 					TextYAlignment = Enum.TextYAlignment.Top,
-					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 					BackgroundTransparency = 0.999,
 					BorderSizePixel = 0,
 					Position = UDim2.new(0, 10, 0, 10),
 					Size = UDim2.new(1, -100, 0, 13)
 				}, Button)
+                
+        Custom:Create("UIStroke", {
+            Color = Color3.fromRGB(255, 255, 255),
+            Thickness = 0.2, 
+            Transparency = 0.5,
+        }, ButtonTitle)
 
         local ButtonContent = Custom:Create("TextLabel", {
 					Name = "ButtonContent",
@@ -1495,6 +1522,12 @@ end
 					Position = UDim2.new(0, 10, 0, 23),
 					Size = UDim2.new(1, -100, 0, 12)
 				}, Button)
+        
+        Custom:Create("UIStroke", {
+            Color = Custom.ColorRGB,
+            Thickness = 0.2, 
+            Transparency = 0.6,
+        }, ButtonContent)
 
         local function UpdateButtonSize()
           local _Height = 12 + (12 * (ButtonContent.TextBounds.X // ButtonContent.AbsoluteSize.X))
@@ -1571,8 +1604,8 @@ function Item:AddToggle(Config)
     local Funcs_Toggle = {Value = Default}
 
     local Toggle = Custom:Create("Frame", {
-        BackgroundColor3 = Custom.AccentColor, -- MODIFIKASI: Menggunakan AccentColor (Biru)
-        BackgroundTransparency = 0.85, -- MODIFIKASI: 0.85
+        BackgroundColor3 = Custom.AccentColor, -- Biru Transparan
+        BackgroundTransparency = 0.85, 
         BorderSizePixel = 0,
         LayoutOrder = ItemCount,
         Size = UDim2.new(1, 0, 0, 35),
@@ -1586,13 +1619,21 @@ function Item:AddToggle(Config)
         Font = Enum.Font.GothamBold,
         Text = Title,
         TextSize = 13,
-        TextColor3 = Color3.fromRGB(231, 231, 231),
+        TextColor3 = Color3.fromRGB(255, 255, 255), -- Putih nyala
+        TextStrokeColor3 = Color3.fromRGB(20, 20, 20),
+        TextStrokeTransparency = 0.7,
         TextXAlignment = Enum.TextXAlignment.Left,
         TextYAlignment = Enum.TextYAlignment.Top,
         BackgroundTransparency = 0.999,
         Position = UDim2.new(0, 10, 0, 10),
         Size = UDim2.new(1, -100, 0, 13)
     }, Toggle)
+    
+    Custom:Create("UIStroke", {
+        Color = Color3.fromRGB(255, 255, 255),
+        Thickness = 0.2, 
+        Transparency = 0.5,
+    }, ToggleTitle)
 
     local ToggleContent = Custom:Create("TextLabel", {
         Name = "ToggleContent",
@@ -1607,6 +1648,12 @@ function Item:AddToggle(Config)
         Position = UDim2.new(0, 10, 0, 23),
         Size = UDim2.new(1, -100, 0, 12)
     }, Toggle)
+    
+    Custom:Create("UIStroke", {
+        Color = Custom.ColorRGB,
+        Thickness = 0.2, 
+        Transparency = 0.6,
+    }, ToggleContent)
 
     local function UpdateToggleSize()
         ToggleContent.TextWrapped = false
@@ -1709,8 +1756,8 @@ end
 				local Funcs_Slider = {Value = Default}
         
         local Slider = Custom:Create("Frame", {
-					BackgroundColor3 = Custom.AccentColor, -- MODIFIKASI: Menggunakan AccentColor (Biru)
-					BackgroundTransparency = 0.85, -- MODIFIKASI: 0.85
+					BackgroundColor3 = Custom.AccentColor, -- Biru Transparan
+					BackgroundTransparency = 0.85, 
 					BorderColor3 = Color3.fromRGB(0, 0, 0),
 					BorderSizePixel = 0,
 					LayoutOrder = ItemCount,
@@ -1722,14 +1769,15 @@ end
           CornerRadius = UDim.new(0, 4), 
         }, Slider)
 
-        Custom:Create("TextLabel", {
+        local SliderTitle = Custom:Create("TextLabel", {
 					Font = Enum.Font.GothamBold,
 					Text = Title,
-					TextColor3 = Color3.fromRGB(230, 230, 230),
+					TextColor3 = Color3.fromRGB(255, 255, 255), -- Putih nyala
+                    TextStrokeColor3 = Color3.fromRGB(20, 20, 20),
+                    TextStrokeTransparency = 0.7,
 					TextSize = 13,
 					TextXAlignment = Enum.TextXAlignment.Left,
 					TextYAlignment = Enum.TextYAlignment.Top,
-					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 					BackgroundTransparency = 0.9990000128746033,
 					BorderColor3 = Color3.fromRGB(0, 0, 0),
 					BorderSizePixel = 0,
@@ -1737,6 +1785,12 @@ end
 					Size = UDim2.new(1, -180, 0, 13),
 					Name = "SliderTitle",
 				}, Slider)
+                
+        Custom:Create("UIStroke", {
+            Color = Color3.fromRGB(255, 255, 255),
+            Thickness = 0.2, 
+            Transparency = 0.5,
+        }, SliderTitle)
 
 				local SliderContent = Custom:Create("TextLabel", {
 					Font = Enum.Font.GothamBold,
@@ -1746,7 +1800,6 @@ end
 					TextTransparency = 0.6000000238418579,
 					TextXAlignment = Enum.TextXAlignment.Left,
 					TextYAlignment = Enum.TextYAlignment.Bottom,
-					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 					BackgroundTransparency = 0.9990000128746033,
 					BorderColor3 = Color3.fromRGB(0, 0, 0),
 					BorderSizePixel = 0,
@@ -1754,6 +1807,12 @@ end
 					Size = UDim2.new(1, -180, 0, 12),
 					Name = "SliderContent",
 				}, Slider)
+                
+        Custom:Create("UIStroke", {
+            Color = Custom.ColorRGB,
+            Thickness = 0.2, 
+            Transparency = 0.6,
+        }, SliderContent)
 
         local function UpdateSliderSize()
           SliderContent.TextWrapped = false
@@ -1770,7 +1829,8 @@ end
 
         local SliderInput = Custom:Create("Frame", {
 					AnchorPoint = Vector2.new(0, 0.5),
-					BackgroundColor3 = Custom.ColorRGB,
+					BackgroundColor3 = Custom.FrameDark, -- MODIFIKASI: Input box menjadi gelap
+					BackgroundTransparency = 0.3, -- MODIFIKASI: Transparansi rendah (solid)
 					BorderColor3 = Color3.fromRGB(0, 0, 0),
 					BorderSizePixel = 0,
 					Position = UDim2.new(1, -155, 0.5, 0),
@@ -1796,6 +1856,13 @@ end
 					Position = UDim2.new(0, -1, 0, 0),
 					Size = UDim2.new(1, 0, 1, 0),
 				}, SliderInput)
+                
+        -- Efek menyala pada teks input
+        Custom:Create("UIStroke", {
+            Color = Custom.ColorRGB,
+            Thickness = 0.5,
+            Transparency = 0.4,
+        }, TextBox)
 
         local SliderFrame = Custom:Create("Frame", {
 					AnchorPoint = Vector2.new(1, 0.5),
@@ -1917,8 +1984,8 @@ end
 				local Funcs_Input = {Value = Default}
 
         local Input = Custom:Create("Frame", {
-          BackgroundColor3 = Custom.AccentColor, -- MODIFIKASI: Menggunakan AccentColor (Biru)
-          BackgroundTransparency = 0.85, -- MODIFIKASI: 0.85
+          BackgroundColor3 = Custom.AccentColor, -- Biru Transparan
+          BackgroundTransparency = 0.85, 
           BorderColor3 = Color3.fromRGB(0, 0, 0),
           BorderSizePixel = 0,
           LayoutOrder = ItemCount,
@@ -1933,11 +2000,12 @@ end
         local InputTitle = Custom:Create("TextLabel", {
           Font = Enum.Font.GothamBold,
           Text = Title,
-          TextColor3 = Color3.fromRGB(230, 230, 230),
+          TextColor3 = Color3.fromRGB(255, 255, 255), -- Putih nyala
+          TextStrokeColor3 = Color3.fromRGB(20, 20, 20),
+          TextStrokeTransparency = 0.7,
           TextSize = 13,
           TextXAlignment = Enum.TextXAlignment.Left,
           TextYAlignment = Enum.TextYAlignment.Top,
-          BackgroundColor3 = Color3.fromRGB(255, 255, 255),
           BackgroundTransparency = 0.999,
           BorderColor3 = Color3.fromRGB(0, 0, 0),
           BorderSizePixel = 0,
@@ -1945,6 +2013,13 @@ end
           Size = UDim2.new(1, -180, 0, 13),
           Name = "InputTitle",
         }, Input)
+        
+        Custom:Create("UIStroke", {
+            Color = Color3.fromRGB(255, 255, 255),
+            Thickness = 0.2, 
+            Transparency = 0.5,
+        }, InputTitle)
+
 
         local InputContent = Custom:Create("TextLabel", {
           Font = Enum.Font.GothamBold,
@@ -1955,7 +2030,6 @@ end
           TextWrapped = true,
           TextXAlignment = Enum.TextXAlignment.Left,
           TextYAlignment = Enum.TextYAlignment.Bottom,
-          BackgroundColor3 = Color3.fromRGB(255, 255, 255),
           BackgroundTransparency = 0.999,
           BorderColor3 = Color3.fromRGB(0, 0, 0),
           BorderSizePixel = 0,
@@ -1964,6 +2038,12 @@ end
           Name = "InputContent",
           Parent = Input
         })
+        
+        Custom:Create("UIStroke", {
+            Color = Custom.ColorRGB,
+            Thickness = 0.2, 
+            Transparency = 0.6,
+        }, InputContent)
 
         local function UpdateInputSize()
           local Ratio = InputContent.TextBounds.X / InputContent.AbsoluteSize.X
@@ -1984,8 +2064,8 @@ end
 
         local InputFrame = Custom:Create("Frame", {
           AnchorPoint = Vector2.new(1, 0.5),
-          BackgroundColor3 = Custom.FrameDark, 
-          BackgroundTransparency = 0.95,
+          BackgroundColor3 = Custom.FrameDark, -- MODIFIKASI: Input box menjadi gelap
+          BackgroundTransparency = 0.3, -- MODIFIKASI: Transparansi rendah (solid)
           BorderColor3 = Color3.fromRGB(0, 0, 0),
           BorderSizePixel = 0,
           ClipsDescendants = true,
@@ -2008,8 +2088,6 @@ end
           TextColor3 = Color3.fromRGB(255, 255, 255),
           TextSize = 12,
           TextXAlignment = Enum.TextXAlignment.Left,
-          AnchorPoint = Vector2.new(0, 0.5),
-          BackgroundColor3 = Color3.fromRGB(255, 255, 255),
           BackgroundTransparency = 0.999,
           BorderColor3 = Color3.fromRGB(0, 0, 0),
           BorderSizePixel = 0,
@@ -2017,6 +2095,13 @@ end
           Size = UDim2.new(1, -10, 1, -8),
           Name = "InputTextBox"
         }, InputFrame)
+        
+        -- Efek menyala pada teks input
+        Custom:Create("UIStroke", {
+            Color = Custom.ColorRGB,
+            Thickness = 0.5,
+            Transparency = 0.4,
+        }, InputTextBox)
 
         function Funcs_Input:Set(Value)
 					InputTextBox.Text = Value
@@ -2050,8 +2135,8 @@ function Item:AddDropdown(Config)
     local Funcs_Dropdown = {Value = Default, Options = Options}
 
     local Dropdown = Custom:Create("Frame", {
-        BackgroundColor3 = Custom.AccentColor, -- MODIFIKASI: Menggunakan AccentColor (Biru)
-        BackgroundTransparency = 0.85, -- MODIFIKASI: 0.85
+        BackgroundColor3 = Custom.AccentColor, -- Biru Transparan
+        BackgroundTransparency = 0.85, 
         BorderColor3 = Color3.fromRGB(0, 0, 0),
         BorderSizePixel = 0,
         LayoutOrder = ItemCount,
@@ -2064,7 +2149,6 @@ function Item:AddDropdown(Config)
         Text = "",
         TextColor3 = Color3.fromRGB(0, 0, 0),
         TextSize = 14,
-        BackgroundColor3 = Color3.fromRGB(0, 0, 0),
         BackgroundTransparency = 0.999,
         BorderColor3 = Color3.fromRGB(0, 0, 0),
         BorderSizePixel = 0,
@@ -2079,11 +2163,12 @@ function Item:AddDropdown(Config)
     local DropdownTitle = Custom:Create("TextLabel", {
         Font = Enum.Font.GothamBold,
         Text = Title,
-        TextColor3 = Color3.fromRGB(230, 230, 230),
+        TextColor3 = Color3.fromRGB(255, 255, 255), -- Putih nyala
+        TextStrokeColor3 = Color3.fromRGB(20, 20, 20),
+        TextStrokeTransparency = 0.7,
         TextSize = 13,
         TextXAlignment = Enum.TextXAlignment.Left,
         TextYAlignment = Enum.TextYAlignment.Top,
-        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
         BackgroundTransparency = 0.999,
         BorderColor3 = Color3.fromRGB(0, 0, 0),
         BorderSizePixel = 0,
@@ -2092,6 +2177,12 @@ function Item:AddDropdown(Config)
         Name = "DropdownTitle",
         Parent = Dropdown
     })
+    
+    Custom:Create("UIStroke", {
+        Color = Color3.fromRGB(255, 255, 255),
+        Thickness = 0.2, 
+        Transparency = 0.5,
+    }, DropdownTitle)
 
     local DropdownContent = Custom:Create("TextLabel", {
         Font = Enum.Font.GothamBold,
@@ -2102,7 +2193,6 @@ function Item:AddDropdown(Config)
         TextWrapped = true,
         TextXAlignment = Enum.TextXAlignment.Left,
         TextYAlignment = Enum.TextYAlignment.Bottom,
-        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
         BackgroundTransparency = 0.999,
         BorderColor3 = Color3.fromRGB(0, 0, 0),
         BorderSizePixel = 0,
@@ -2112,6 +2202,12 @@ function Item:AddDropdown(Config)
         Parent = Dropdown
     })
     
+    Custom:Create("UIStroke", {
+        Color = Custom.ColorRGB,
+        Thickness = 0.2, 
+        Transparency = 0.6,
+    }, DropdownContent)
+
     DropdownContent.Size = UDim2.new(1, -180, 0, 12 + (12 * (DropdownContent.TextBounds.X // DropdownContent.AbsoluteSize.X)))
     DropdownContent.TextWrapped = true
     Dropdown.Size = UDim2.new(1, 0, 0, DropdownContent.AbsoluteSize.Y + 33)
@@ -2128,8 +2224,8 @@ function Item:AddDropdown(Config)
 
     local SelectOptionsFrame = Custom:Create("Frame", {
         AnchorPoint = Vector2.new(1, 0.5),
-        BackgroundColor3 = Custom.FrameDark, 
-        BackgroundTransparency = 0.95,
+        BackgroundColor3 = Custom.FrameDark, -- MODIFIKASI: Input box menjadi gelap
+        BackgroundTransparency = 0.3, -- MODIFIKASI: Transparansi rendah (solid)
         BorderColor3 = Color3.fromRGB(0, 0, 0),
         BorderSizePixel = 0,
         Position = UDim2.new(1, -7, 0.5, 0),
@@ -2166,8 +2262,6 @@ function Item:AddDropdown(Config)
         TextTransparency = 0.6,
         TextWrapped = true,
         TextXAlignment = Enum.TextXAlignment.Left,
-        AnchorPoint = Vector2.new(0, 0.5),
-        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
         BackgroundTransparency = 0.999,
         BorderColor3 = Color3.fromRGB(0, 0, 0),
         BorderSizePixel = 0,
@@ -2175,12 +2269,18 @@ function Item:AddDropdown(Config)
         Size = UDim2.new(1, -30, 1, -8),
         Name = "OptionSelecting",
     }, SelectOptionsFrame)
+    
+    -- Efek menyala pada teks seleksi
+    Custom:Create("UIStroke", {
+        Color = Custom.ColorRGB,
+        Thickness = 0.5,
+        Transparency = 0.4,
+    }, OptionSelecting)
 
     local OptionImg = Custom:Create("ImageLabel", {
         Image = "rbxassetid://16851841101",
         ImageColor3 = Color3.fromRGB(231, 231, 231),
         AnchorPoint = Vector2.new(1, 0.5),
-        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
         BackgroundTransparency = 0.999,
         BorderColor3 = Color3.fromRGB(0, 0, 0),
         BorderSizePixel = 0,
@@ -2195,7 +2295,6 @@ function Item:AddDropdown(Config)
         ScrollBarThickness = 0,
         Active = true,
         LayoutOrder = CountDropdown,
-        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
         BackgroundTransparency = 0.999,
         BorderColor3 = Color3.fromRGB(0, 0, 0),
         BorderSizePixel = 0,
@@ -2221,6 +2320,13 @@ function Item:AddDropdown(Config)
         LayoutOrder = -1, 
         Parent = ScrollSelect
     })
+    
+    -- Efek menyala pada teks SearchBar
+    Custom:Create("UIStroke", {
+        Color = Custom.ColorRGB,
+        Thickness = 0.5,
+        Transparency = 0.4,
+    }, SearchBar)
 
     Custom:Create("UICorner", {
         CornerRadius = UDim.new(0, 4) 
@@ -2295,7 +2401,7 @@ function Item:AddDropdown(Config)
                             TweenService:Create(stroke, tweenInfoInOut, {Transparency = Transparency}):Play()
                         end
                     end
-                    Drop.BackgroundColor3 = isTextFound and Custom.AccentColor or Color3.fromRGB(255, 255, 255) -- MODIFIKASI: Option aktif menggunakan AccentColor
+                    Drop.BackgroundColor3 = isTextFound and Custom.AccentColor or Color3.fromRGB(255, 255, 255) 
                     TweenService:Create(Drop, tweenInfoInOut, {BackgroundTransparency = BackgroundTransparency}):Play()
                 end
             end
@@ -2336,7 +2442,6 @@ function Item:AddDropdown(Config)
             TextColor3 = Color3.fromRGB(255, 255, 255),
             TextSize = 13,
             TextXAlignment = Enum.TextXAlignment.Left,
-            BackgroundColor3 = Color3.fromRGB(255, 255, 255),
             BackgroundTransparency = 0.999,
             BorderColor3 = Color3.fromRGB(0, 0, 0),
             BorderSizePixel = 0,
@@ -2348,7 +2453,9 @@ function Item:AddDropdown(Config)
             Font = Enum.Font.GothamBold,
             Text = OptionName,
             TextSize = 13,
-            TextColor3 = Color3.fromRGB(230, 230, 230),
+            TextColor3 = Color3.fromRGB(255, 255, 255), -- Putih nyala
+            TextStrokeColor3 = Color3.fromRGB(20, 20, 20),
+            TextStrokeTransparency = 0.7,
             TextXAlignment = Enum.TextXAlignment.Left,
             TextYAlignment = Enum.TextYAlignment.Center,
             BackgroundTransparency = 1,
@@ -2356,6 +2463,12 @@ function Item:AddDropdown(Config)
             Size = UDim2.new(1, -16, 1, 0),
             Name = "OptionText"
         }, Option)
+        
+        Custom:Create("UIStroke", {
+            Color = Custom.ColorRGB,
+            Thickness = 0.2, 
+            Transparency = 0.6,
+        }, OptionText)
 
         local ChooseFrame = Custom:Create("Frame", {
             AnchorPoint = Vector2.new(0, 0.5),
