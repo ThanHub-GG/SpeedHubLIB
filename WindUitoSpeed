@@ -20,10 +20,10 @@ end
 local Custom = {} do
     -- SKEMA WARNA HYBRID (Ungu-Biru-Merah)
     Custom.ColorRGB = Color3.fromRGB(138, 43, 226)      -- UNGU (Aksen Utama)
-    Custom.AccentColor = Color3.fromRGB(0, 191, 255)    -- BIRU CERAH (Aksen Gradient)
+    Custom.AccentColor = Color3.fromRGB(0, 191, 255)    -- BIRU CERAH (Aksen Gradient & Latar Item)
     Custom.DarkBlue = Color3.fromRGB(255, 69, 0)        -- MERAH ORANGE (Warna Kontras)
     Custom.BackgroundDark = Color3.fromRGB(10, 10, 15)  -- LATAR BELAKANG SANGAT GELAP
-    Custom.FrameDark = Color3.fromRGB(25, 25, 35)       -- FRAME GELAP
+    Custom.FrameDark = Color3.fromRGB(25, 25, 35)       -- FRAME GELAP (Latar Panel)
 
     function Custom:Create(Name, Properties, Parent)
         local _instance = Instance.new(Name)
@@ -1292,8 +1292,8 @@ function Item:AddParagraph(Config)
     local SettingFuncs = {}
 
     local Paragraph = Custom:Create("Frame", {
-        BackgroundColor3 = Custom.FrameDark, 
-        BackgroundTransparency = 0.85, -- MODIFIKASI: Diubah ke 0.85 untuk kontras yang lebih baik
+        BackgroundColor3 = Custom.AccentColor, -- MODIFIKASI: Menggunakan AccentColor (Biru)
+        BackgroundTransparency = 0.85, -- MODIFIKASI: 0.85 untuk kontras yang jelas
         BorderSizePixel = 0,
         LayoutOrder = ItemCount,
         Size = UDim2.new(1, 0, 0, 35),
@@ -1371,8 +1371,8 @@ end
         local Sep_Funcs = {}
 
         local Seperator = Custom:Create("Frame", {
-          BackgroundColor3 = Custom.FrameDark, 
-          BackgroundTransparency = 0.85, -- MODIFIKASI: Diubah ke 0.85 untuk kontras yang lebih baik
+          BackgroundColor3 = Custom.AccentColor, -- MODIFIKASI: Menggunakan AccentColor (Biru)
+          BackgroundTransparency = 0.85, -- MODIFIKASI: 0.85
           BorderColor3 = Color3.fromRGB(0, 0, 0),
           BorderSizePixel = 1,
           LayoutOrder = ItemCount,
@@ -1423,7 +1423,7 @@ end
         local LineFuncs = {}
     
         local Line = Custom:Create("Frame", {
-          BackgroundColor3 = Custom.FrameDark, 
+          BackgroundColor3 = Custom.AccentColor, -- MODIFIKASI: Menggunakan AccentColor (Biru)
           BackgroundTransparency = 0.7, 
           BorderSizePixel = 0,
           LayoutOrder = ItemCount,
@@ -1454,8 +1454,8 @@ end
 
         local Button = Custom:Create("Frame", {
 					Name = "Button",
-					BackgroundColor3 = Custom.FrameDark, 
-					BackgroundTransparency = 0.85, -- MODIFIKASI: Diubah ke 0.85
+					BackgroundColor3 = Custom.AccentColor, -- MODIFIKASI: Menggunakan AccentColor (Biru)
+					BackgroundTransparency = 0.85, -- MODIFIKASI: 0.85
 					BorderSizePixel = 0,
 					LayoutOrder = ItemCount,
 					Size = UDim2.new(1, 0, 0, 35)
@@ -1571,8 +1571,8 @@ function Item:AddToggle(Config)
     local Funcs_Toggle = {Value = Default}
 
     local Toggle = Custom:Create("Frame", {
-        BackgroundColor3 = Custom.FrameDark, 
-        BackgroundTransparency = 0.85, -- MODIFIKASI: Diubah ke 0.85
+        BackgroundColor3 = Custom.AccentColor, -- MODIFIKASI: Menggunakan AccentColor (Biru)
+        BackgroundTransparency = 0.85, -- MODIFIKASI: 0.85
         BorderSizePixel = 0,
         LayoutOrder = ItemCount,
         Size = UDim2.new(1, 0, 0, 35),
@@ -1709,8 +1709,8 @@ end
 				local Funcs_Slider = {Value = Default}
         
         local Slider = Custom:Create("Frame", {
-					BackgroundColor3 = Custom.FrameDark, 
-					BackgroundTransparency = 0.85, -- MODIFIKASI: Diubah ke 0.85
+					BackgroundColor3 = Custom.AccentColor, -- MODIFIKASI: Menggunakan AccentColor (Biru)
+					BackgroundTransparency = 0.85, -- MODIFIKASI: 0.85
 					BorderColor3 = Color3.fromRGB(0, 0, 0),
 					BorderSizePixel = 0,
 					LayoutOrder = ItemCount,
@@ -1917,8 +1917,8 @@ end
 				local Funcs_Input = {Value = Default}
 
         local Input = Custom:Create("Frame", {
-          BackgroundColor3 = Custom.FrameDark, 
-          BackgroundTransparency = 0.85, -- MODIFIKASI: Diubah ke 0.85
+          BackgroundColor3 = Custom.AccentColor, -- MODIFIKASI: Menggunakan AccentColor (Biru)
+          BackgroundTransparency = 0.85, -- MODIFIKASI: 0.85
           BorderColor3 = Color3.fromRGB(0, 0, 0),
           BorderSizePixel = 0,
           LayoutOrder = ItemCount,
@@ -2050,8 +2050,8 @@ function Item:AddDropdown(Config)
     local Funcs_Dropdown = {Value = Default, Options = Options}
 
     local Dropdown = Custom:Create("Frame", {
-        BackgroundColor3 = Custom.FrameDark, 
-        BackgroundTransparency = 0.85, -- MODIFIKASI: Diubah ke 0.85
+        BackgroundColor3 = Custom.AccentColor, -- MODIFIKASI: Menggunakan AccentColor (Biru)
+        BackgroundTransparency = 0.85, -- MODIFIKASI: 0.85
         BorderColor3 = Color3.fromRGB(0, 0, 0),
         BorderSizePixel = 0,
         LayoutOrder = ItemCount,
@@ -2295,7 +2295,7 @@ function Item:AddDropdown(Config)
                             TweenService:Create(stroke, tweenInfoInOut, {Transparency = Transparency}):Play()
                         end
                     end
-                    Drop.BackgroundColor3 = isTextFound and Custom.FrameDark or Color3.fromRGB(255, 255, 255) 
+                    Drop.BackgroundColor3 = isTextFound and Custom.AccentColor or Color3.fromRGB(255, 255, 255) -- MODIFIKASI: Option aktif menggunakan AccentColor
                     TweenService:Create(Drop, tweenInfoInOut, {BackgroundTransparency = BackgroundTransparency}):Play()
                 end
             end
