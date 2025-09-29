@@ -4,7 +4,7 @@ local Player = Players.LocalPlayer
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
-local RenderStepped = RunService.RenderStepped
+local RenderStepped = game:GetService("RunService").RenderStepped
 local ProtectGui = protectgui or (syn and syn.protect_gui) or function() end
 
 local function generateRandomString(length)
@@ -18,12 +18,12 @@ local function generateRandomString(length)
 end
 
 local Custom = {} do
-    -- MODIFIKASI: SKEMA WARNA BARU (Merah/Abu-abu Kontras)
-    Custom.ColorRGB = Color3.fromRGB(255, 50, 50)       -- MERAH CERAH (Aksen Utama)
-    Custom.AccentColor = Color3.fromRGB(150, 0, 0)      -- MERAH TUA (Aksen Gradient)
-    Custom.DarkBlue = Custom.ColorRGB                   -- Menggunakan warna aksen utama
-    Custom.BackgroundDark = Color3.fromRGB(15, 15, 15)  -- LATAR BELAKANG SANGAT GELAP
-    Custom.FrameDark = Color3.fromRGB(30, 30, 30)       -- FRAME GELAP
+    -- MODIFIKASI: SKEMA WARNA HYBRID (Ungu-Biru-Merah)
+    Custom.ColorRGB = Color3.fromRGB(138, 43, 226)      -- UNGU (Aksen Utama - bar penunjuk, toggle aktif)
+    Custom.AccentColor = Color3.fromRGB(0, 191, 255)    -- BIRU CERAH (Aksen Gradient)
+    Custom.DarkBlue = Color3.fromRGB(255, 69, 0)        -- MERAH ORANGE (Warna Kontras)
+    Custom.BackgroundDark = Color3.fromRGB(10, 10, 15)  -- LATAR BELAKANG SANGAT GELAP
+    Custom.FrameDark = Color3.fromRGB(25, 25, 35)       -- FRAME GELAP
 
     function Custom:Create(Name, Properties, Parent)
         local _instance = Instance.new(Name)
@@ -44,8 +44,8 @@ local function OpenClose()
   local ScreenGui = Custom:Create("ScreenGui", {
     Name = "OpenClose",
     ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-  }, RunService:IsStudio() and LocalPlayer.PlayerGui or game:GetService("CoreGui"))
-  ProtectGui(screenGui)
+  }, RunService:IsStudio() and Player.PlayerGui or game:GetService("CoreGui"))
+  ProtectGui(ScreenGui)
   local Close_ImageButton = Custom:Create("ImageButton", {
     BackgroundColor3 = Custom.BackgroundDark,
     BorderColor3 = Custom.ColorRGB,
@@ -58,7 +58,7 @@ local function OpenClose()
 
   local UICorner = Custom:Create("UICorner", {
     Name = "MainCorner",
-    CornerRadius = UDim.new(0, 0), -- MODIFIKASI: DIBUAT KOTAK
+    CornerRadius = UDim.new(0, 4), -- Kembali ke radius kecil
   }, Close_ImageButton)
   local UIGradient = Custom:Create("UIGradient", {
     Color = ColorSequence.new{
@@ -253,7 +253,7 @@ function Speed_Library:SetNotification(Config)
         Name = "NotificationFrameReal"
     }, NotificationFrame)
 
-    Custom:Create("UICorner",{CornerRadius=UDim.new(0, 0)}, NotificationFrameReal) -- MODIFIKASI: DIBUAT KOTAK
+    Custom:Create("UICorner",{CornerRadius=UDim.new(0, 4)}, NotificationFrameReal) -- Kembali ke radius kecil
     Custom:Create("UIGradient", {
         Color = ColorSequence.new{
             ColorSequenceKeypoint.new(0, Custom.BackgroundDark),
@@ -308,7 +308,7 @@ function Speed_Library:SetNotification(Config)
     })
 
     Custom:Create("UIStroke",{Color=Color3.fromRGB(255,255,255),Thickness=0.5,Parent=TextLabel})
-    Custom:Create("UICorner",{Parent=Top,CornerRadius=UDim.new(0, 0)}) -- MODIFIKASI: DIBUAT KOTAK
+    Custom:Create("UICorner",{Parent=Top,CornerRadius=UDim.new(0, 4)}) -- Kembali ke radius kecil
 
     local TextLabel1 = Custom:Create("TextLabel", {
         Font=Enum.Font.GothamBold,
@@ -330,7 +330,7 @@ function Speed_Library:SetNotification(Config)
         BackgroundTransparency=0.999,
         AnchorPoint=Vector2.new(1,0.5),
         Position=UDim2.new(1,-5,0.5,0),
-        Size=UDim2.new(0,25,0,25),
+        Size = UDim2.new(0,25,0,25),
         Name="Close",
         Parent=Top
     })
@@ -342,7 +342,7 @@ function Speed_Library:SetNotification(Config)
         BackgroundTransparency=0.999,
         BorderSizePixel=0,
         Position=UDim2.new(0.49,0,0.5,0),
-        Size=UDim2.new(1,-8,1,-8),
+        Size = UDim2.new(1,-8,1,-8),
         Parent=Close
     })
 
@@ -356,7 +356,7 @@ function Speed_Library:SetNotification(Config)
         BackgroundTransparency=0.999,
         BorderSizePixel=0,
         Position=UDim2.new(0,10,0,27),
-        Size=UDim2.new(1,-20,0,13),
+        Size = UDim2.new(1,-20,0,13),
         Parent=NotificationFrameReal,
         TextWrapped=true
     })
@@ -401,7 +401,7 @@ function Speed_Library:CreateWindow(Config)
   local SpeedHubXGui = Custom:Create("ScreenGui", {
       Name = "ShieldTeam || Luowis",
       ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    }, RunService:IsStudio() and LocalPlayer.PlayerGui or game:GetService("CoreGui"))
+    }, RunService:IsStudio() and Player.PlayerGui or game:GetService("CoreGui"))
     ProtectGui(SpeedHubXGui)
 
     local DropShadowHolder = Custom:Create("Frame", {
@@ -431,7 +431,7 @@ function Speed_Library:CreateWindow(Config)
     local Main = Custom:Create("Frame", {
         AnchorPoint = Vector2.new(0.5, 0.5),
         BackgroundColor3 = Custom.BackgroundDark,
-        BackgroundTransparency = 0.01, -- MODIFIKASI: Lebih solid (0.01)
+        BackgroundTransparency = 0.01, 
         BorderColor3 = Color3.fromRGB(0, 0, 0),
         BorderSizePixel = 0,
         Position = UDim2.new(0.5, 0, 0.5, 0),
@@ -440,7 +440,7 @@ function Speed_Library:CreateWindow(Config)
     }, DropShadow)
 
     Custom:Create("UICorner", {
-        CornerRadius = UDim.new(0, 0) -- MODIFIKASI: DIBUAT KOTAK (0)
+        CornerRadius = UDim.new(0, 0) -- KOTAK
     }, Main)
 
     Custom:Create("UIGradient", {
@@ -491,7 +491,7 @@ function Speed_Library:CreateWindow(Config)
     }, Top)
 
     Custom:Create("UICorner", {
-        CornerRadius = UDim.new(0, 0) -- MODIFIKASI: DIBUAT KOTAK (0)
+        CornerRadius = UDim.new(0, 0) -- KOTAK
     }, Top)
 
     Custom:Create("UIStroke", {
@@ -584,7 +584,7 @@ function Speed_Library:CreateWindow(Config)
     }, Main)
 
     Custom:Create("UICorner", {
-        CornerRadius = UDim.new(0, 0) -- MODIFIKASI: DIBUAT KOTAK (0)
+        CornerRadius = UDim.new(0, 0) -- KOTAK
     }, LayersTab)
 
     Custom:Create("UIGradient", {
@@ -602,13 +602,13 @@ function Speed_Library:CreateWindow(Config)
     }, LayersTab)
 
     local DecideFrame = Custom:Create("Frame", {
-        AnchorPoint = Vector2.new(0, 0), -- MODIFIKASI: Posisikan di kiri atas
+        AnchorPoint = Vector2.new(0, 0), 
         BackgroundColor3 = Custom.ColorRGB,
         BackgroundTransparency = 0.3,
         BorderColor3 = Color3.fromRGB(0, 0, 0),
         BorderSizePixel = 0,
-        Position = UDim2.new(0, 9, 0, 38), -- MODIFIKASI: Posisikan di bawah Top bar
-        Size = UDim2.new(1, -18, 0, 2), -- MODIFIKASI: Lebar penuh LayersTab
+        Position = UDim2.new(0, 9, 0, 38), 
+        Size = UDim2.new(1, -18, 0, 2), 
         Name = "DecideFrame"
     }, Main)
 
@@ -623,7 +623,7 @@ function Speed_Library:CreateWindow(Config)
     }, Main)
 
     Custom:Create("UICorner", {
-        CornerRadius = UDim.new(0, 0) -- MODIFIKASI: DIBUAT KOTAK (0)
+        CornerRadius = UDim.new(0, 0) -- KOTAK
     }, Layers)
 
     Custom:Create("UIGradient", {
@@ -744,7 +744,6 @@ function Speed_Library:CreateWindow(Config)
         AnchorPoint = Vector2.new(1, 1),
         BackgroundColor3 = Custom.BackgroundDark,
         BackgroundTransparency = 1,
-        BorderColor3 = Color3.fromRGB(0, 0, 0),
         BorderSizePixel = 0,
         ClipsDescendants = true,
         Position = UDim2.new(1, 8, 1, 8),
@@ -786,7 +785,7 @@ function Speed_Library:CreateWindow(Config)
     }, DropShadowHolder1)
 
     Custom:Create("UICorner", {
-        CornerRadius = UDim.new(0, 0) -- MODIFIKASI: DIBUAT KOTAK (0)
+        CornerRadius = UDim.new(0, 4) -- Kembali ke radius kecil
     }, MoreBlur)
 
     local ConnectButton = Custom:Create("TextButton", {
@@ -830,7 +829,7 @@ function Speed_Library:CreateWindow(Config)
     end)
 
     Custom:Create("UICorner", {
-        CornerRadius = UDim.new(0, 0), -- MODIFIKASI: DIBUAT KOTAK (0)
+        CornerRadius = UDim.new(0, 4), -- Kembali ke radius kecil
     }, DropdownSelect)
 
     Custom:Create("UIGradient", {
@@ -910,7 +909,7 @@ function Speed_Library:CreateWindow(Config)
         }, ScrollTab)
 
         Custom:Create("UICorner", {
-            CornerRadius = UDim.new(0, 0), -- MODIFIKASI: DIBUAT KOTAK (0)
+            CornerRadius = UDim.new(0, 0), -- KOTAK
         }, Tab)
 
         Custom:Create("UIGradient", {
@@ -983,8 +982,8 @@ function Speed_Library:CreateWindow(Config)
                 BackgroundColor3 = Custom.ColorRGB,
                 BorderColor3 = Color3.fromRGB(0, 0, 0),
                 BorderSizePixel = 0,
-                Position = UDim2.new(0, 0, 0, 0), -- MODIFIKASI: Posisikan di kiri penuh
-                Size = UDim2.new(0, 2, 1, 0), -- MODIFIKASI: Tinggi penuh (1,0)
+                Position = UDim2.new(0, 0, 0, 0), 
+                Size = UDim2.new(0, 2, 1, 0), 
                 Name = "ChooseFrame",
             }, Tab)
     
@@ -994,7 +993,7 @@ function Speed_Library:CreateWindow(Config)
             }, ChooseFrame)
     
             Custom:Create("UICorner", {
-                CornerRadius = UDim.new(0, 0) -- MODIFIKASI: DIBUAT KOTAK (0)
+                CornerRadius = UDim.new(0, 0) -- KOTAK
             }, ChooseFrame)
 
             Custom:Create("UIGradient", {
@@ -1007,11 +1006,11 @@ function Speed_Library:CreateWindow(Config)
             }, ChooseFrame)
         end
 
-TabButton.Activated:Connect(function()
+        TabButton.Activated:Connect(function()
             CircleClick(TabButton, Player:GetMouse().X, Player:GetMouse().Y)
             local FrameChoose = nil
 
-            -- Mencari FrameChoose yang sudah ada, terlepas dari di Tab mana dia berada
+            -- Mencari FrameChoose yang sudah ada, terlepas dari di Tab mana ia berada
             for _, s in pairs(ScrollTab:GetChildren()) do
                 if s:IsA("Frame") then
                     local chooseFrame = s:FindFirstChild("ChooseFrame")
@@ -1024,8 +1023,8 @@ TabButton.Activated:Connect(function()
     
             if FrameChoose and Tab.LayoutOrder ~= LayersPageLayout.CurrentPage.LayoutOrder then
                 
-                -- **PERBAIKAN KRITIS 1: Pindahkan FrameChoose menjadi anak dari Tab yang baru diklik**
-                FrameChoose.Parent = Tab 
+                -- PERBAIKAN: Pindahkan FrameChoose menjadi anak dari Tab yang baru diklik
+                FrameChoose.Parent = Tab
                 
                 -- Reset transparansi tab lain (kode yang sudah ada)
                 for _, TabFrame in pairs(ScrollTab:GetChildren()) do
@@ -1041,9 +1040,7 @@ TabButton.Activated:Connect(function()
                 local _TabT = TweenService:Create(Tab, TweenInfo.new(0.6, Enum.EasingStyle.Back, Enum.EasingDirection.InOut), {BackgroundTransparency = 0.3})
                 local _TabStroke = TweenService:Create(Tab:FindFirstChild("UIStroke"), TweenInfo.new(0.6, Enum.EasingStyle.Back, Enum.EasingDirection.InOut), {Transparency = 0.2})
                 
-                -- MODIFIKASI: Animasi bar penunjuk tab
-                -- **PERBAIKAN KRITIS 2: Tween FrameChoose ke posisi (0, 0) relatif terhadap Tab baru.**
-                -- Posisi (0, 0) berarti di sudut kiri atas Tab.
+                -- PERBAIKAN: Tween FrameChoose ke posisi (0, 0) relatif terhadap Tab baru.
                 local _FTween = TweenService:Create(FrameChoose, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {
                     Position = UDim2.new(0, 0, 0, 0) 
                 })
@@ -1095,7 +1092,7 @@ TabButton.Activated:Connect(function()
             }, Section)
     
             Custom:Create("UICorner", {
-                CornerRadius = UDim.new(0, 0) -- MODIFIKASI: DIBUAT KOTAK (0)
+                CornerRadius = UDim.new(0, 4) -- Kembali ke radius kecil
             }, SectionReal)
 
             Custom:Create("UIGradient", {
@@ -1137,7 +1134,7 @@ TabButton.Activated:Connect(function()
             }, SectionReal)
 
             Custom:Create("UICorner", {
-                CornerRadius = UDim.new(0, 0) -- MODIFIKASI: DIBUAT KOTAK (0)
+                CornerRadius = UDim.new(0, 4) -- Kembali ke radius kecil
             }, FeatureFrame)
     
             local FeatureImg = Custom:Create("ImageLabel", {
@@ -1184,7 +1181,7 @@ TabButton.Activated:Connect(function()
       }, Section)
 
       Custom:Create("UICorner", {
-        CornerRadius = UDim.new(0, 0) -- MODIFIKASI: DIBUAT KOTAK (0)
+        CornerRadius = UDim.new(0, 4) -- Kembali ke radius kecil
       }, SectionDecideFrame)
 
       Custom:Create("UIGradient", {
@@ -1209,7 +1206,7 @@ TabButton.Activated:Connect(function()
       }, Section)
   
       Custom:Create("UICorner", {
-        CornerRadius = UDim.new(0, 0) -- MODIFIKASI: DIBUAT KOTAK (0)
+        CornerRadius = UDim.new(0, 4) -- Kembali ke radius kecil
       }, SectionAdd)
     
       Custom:Create("UIListLayout", {
@@ -1296,14 +1293,14 @@ function Item:AddParagraph(Config)
 
     local Paragraph = Custom:Create("Frame", {
         BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-        BackgroundTransparency = 0.7, -- MODIFIKASI: Lebih solid (0.7)
+        BackgroundTransparency = 0.7, 
         BorderSizePixel = 0,
         LayoutOrder = ItemCount,
         Size = UDim2.new(1, 0, 0, 35),
         Name = "Paragraph",
     }, SectionAdd)
 
-    Custom:Create("UICorner", { CornerRadius = UDim.new(0, 0) }, Paragraph) -- MODIFIKASI: DIBUAT KOTAK (0)
+    Custom:Create("UICorner", { CornerRadius = UDim.new(0, 4) }, Paragraph) -- Kembali ke radius kecil
 
     local ParagraphTitle = Custom:Create("TextLabel", {
         Font = Enum.Font.GothamBold,
@@ -1330,7 +1327,7 @@ function Item:AddParagraph(Config)
         Position = UDim2.new(0, 10, 0, 23),
         Size = UDim2.new(1, -16, 0, 12),
         Name = "ParagraphContent",
-        RichText = true -- penting
+        RichText = true 
     }, Paragraph)
 
     local function UpdateParagraphSize()
@@ -1365,6 +1362,7 @@ function Item:AddParagraph(Config)
     end
 
     ParagraphContent.Text = parseColors(Content)
+    ItemCount += 1 
     return SettingFuncs
 end
 
@@ -1400,7 +1398,7 @@ end
         }, Seperator)
         
         Custom:Create("UICorner", {
-          CornerRadius = UDim.new(0, 0), -- MODIFIKASI: DIBUAT KOTAK (0)
+          CornerRadius = UDim.new(0, 4), -- Kembali ke radius kecil
         }, Seperator)
         
         local Gradient = Custom:Create("UIGradient", {
@@ -1433,7 +1431,7 @@ end
           Name = "Line",
         }, SectionAdd)
     
-        Custom:Create("UICorner", {CornerRadius = UDim.new(0, 0)}, Line) -- MODIFIKASI: DIBUAT KOTAK (0)
+        Custom:Create("UICorner", {CornerRadius = UDim.new(0, 4)}, Line) -- Kembali ke radius kecil
     
         Custom:Create("UIGradient", {
           Color = ColorSequence.new{
@@ -1457,14 +1455,14 @@ end
         local Button = Custom:Create("Frame", {
 					Name = "Button",
 					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-					BackgroundTransparency = 0.7, -- MODIFIKASI: Lebih solid (0.7)
+					BackgroundTransparency = 0.7, 
 					BorderSizePixel = 0,
 					LayoutOrder = ItemCount,
 					Size = UDim2.new(1, 0, 0, 35)
 				}, SectionAdd)
 
         Custom:Create("UICorner", {
-          CornerRadius = UDim.new(0, 0) -- MODIFIKASI: DIBUAT KOTAK (0)
+          CornerRadius = UDim.new(0, 4) -- Kembali ke radius kecil
         }, Button)
 
         Custom:Create("TextLabel", {
@@ -1530,21 +1528,21 @@ end
         local FeatureFrame1 = Custom:Create("Frame", {
 					Name = "FeatureFrame",
 					AnchorPoint = Vector2.new(1, 0.5),
-					BackgroundColor3 = Custom.ColorRGB, -- MODIFIKASI: Warna Merah (Aksen)
-					BackgroundTransparency = 0, -- MODIFIKASI: Solid
+					BackgroundColor3 = Custom.ColorRGB, 
+					BackgroundTransparency = 0, 
 					BorderSizePixel = 0,
 					Position = UDim2.new(1, -15, 0.5, 0),
 					Size = UDim2.new(0, 25, 0, 25)
 				}, Button)
 
         Custom:Create("UICorner", {
-          CornerRadius = UDim.new(0, 0) -- MODIFIKASI: DIBUAT KOTAK (0)
+          CornerRadius = UDim.new(0, 4) -- Kembali ke radius kecil
         }, FeatureFrame1)
 
         Custom:Create("ImageLabel", {
           Name = "FeatureImg",
           Image = Icon,
-          ImageColor3 = Color3.fromRGB(255, 255, 255), -- MODIFIKASI: Ikon Putih
+          ImageColor3 = Color3.fromRGB(255, 255, 255), 
           AnchorPoint = Vector2.new(0.5, 0.5),
           BackgroundColor3 = Color3.fromRGB(255, 255, 255),
           BackgroundTransparency = 0.999,
@@ -1567,7 +1565,7 @@ function Item:AddToggle(Config)
     local Title = Config[1] or Config.Title or ""
     local Content = Config[2] or Config.Content or ""
     local Default = Config[3] or Config.Default or false
-    local Mode = Config[4] or Config.Mode or "Toggle" -- "Toggle" atau "Box"
+    local Mode = Config[4] or Config.Mode or "Toggle" 
     local Callback = Config[5] or Config.Callback or function() end
 
     local Funcs_Toggle = {Value = Default}
@@ -1575,13 +1573,13 @@ function Item:AddToggle(Config)
     local Toggle = Custom:Create("Frame", {
         Name = "Toggle",
         BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-        BackgroundTransparency = 0.7, -- MODIFIKASI: Lebih solid (0.7)
+        BackgroundTransparency = 0.7, 
         BorderSizePixel = 0,
         LayoutOrder = ItemCount,
         Size = UDim2.new(1, 0, 0, 35)
     }, SectionAdd)
 
-    Custom:Create("UICorner", { CornerRadius = UDim.new(0, 0) }, Toggle) -- MODIFIKASI: DIBUAT KOTAK (0)
+    Custom:Create("UICorner", { CornerRadius = UDim.new(0, 4) }, Toggle) -- Kembali ke radius kecil
 
     local ToggleTitle = Custom:Create("TextLabel", {
         Name = "ToggleTitle",
@@ -1643,7 +1641,7 @@ function Item:AddToggle(Config)
         Size = UDim2.new(0, 30, 0, 15)
     }, Toggle)
 
-    Custom:Create("UICorner", { CornerRadius = UDim.new(0, 0) }, FeatureFrame) -- MODIFIKASI: DIBUAT KOTAK (0)
+    Custom:Create("UICorner", { CornerRadius = UDim.new(0, 15) }, FeatureFrame) -- DIJADIKAN BENTUK PIL/OVAL
     local UIStroke = Custom:Create("UIStroke", {
         Color = Color3.fromRGB(255, 255, 255),
         Thickness = 2,
@@ -1659,7 +1657,7 @@ function Item:AddToggle(Config)
             Size = UDim2.new(0, 14, 0, 14),
             Position = UDim2.new(0, 0, 0, 0)
         }, FeatureFrame)
-        Custom:Create("UICorner", { CornerRadius = UDim.new(0, 0) }, ToggleCircle) -- MODIFIKASI: DIBUAT KOTAK (0)
+        Custom:Create("UICorner", { CornerRadius = UDim.new(0, 15) }, ToggleCircle) -- DIJADIKAN BENTUK LINGKARAN
     end
 
     local function Animate(Value)
@@ -1712,7 +1710,7 @@ end
         
         local Slider = Custom:Create("Frame", {
 					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-					BackgroundTransparency = 0.7, -- MODIFIKASI: Lebih solid (0.7)
+					BackgroundTransparency = 0.7, 
 					BorderColor3 = Color3.fromRGB(0, 0, 0),
 					BorderSizePixel = 0,
 					LayoutOrder = ItemCount,
@@ -1721,7 +1719,7 @@ end
 				}, SectionAdd)
 
         Custom:Create("UICorner", {
-          CornerRadius = UDim.new(0, 0), -- MODIFIKASI: DIBUAT KOTAK (0)
+          CornerRadius = UDim.new(0, 4), -- Kembali ke radius kecil
         }, Slider)
 
         Custom:Create("TextLabel", {
@@ -1781,7 +1779,7 @@ end
 				}, Slider)
 
         Custom:Create("UICorner", {
-          CornerRadius = UDim.new(0, 0), -- MODIFIKASI: DIBUAT KOTAK (0)
+          CornerRadius = UDim.new(0, 4), -- Kembali ke radius kecil
         }, SliderInput)
 
          
@@ -1810,7 +1808,7 @@ end
 					Name = "SliderFrame",
 				}, Slider)
 
-        Custom:Create("UICorner", {CornerRadius = UDim.new(0, 0)}, SliderFrame) -- MODIFIKASI: DIBUAT KOTAK (0)
+        Custom:Create("UICorner", {CornerRadius = UDim.new(0, 4)}, SliderFrame) -- Kembali ke radius kecil
 
         local SliderDraggable = Custom:Create("Frame", {
 					AnchorPoint = Vector2.new(0, 0.5),
@@ -1822,7 +1820,7 @@ end
 					Name = "SliderDraggable",
 				}, SliderFrame)
 
-        Custom:Create("UICorner", {CornerRadius = UDim.new(0, 0)}, SliderDraggable) -- MODIFIKASI: DIBUAT KOTAK (0)
+        Custom:Create("UICorner", {CornerRadius = UDim.new(0, 4)}, SliderDraggable) -- Kembali ke radius kecil
 
         local SliderCircle = Custom:Create("Frame", {
 					AnchorPoint = Vector2.new(1, 0.5),
@@ -1834,7 +1832,7 @@ end
 					Name = "SliderCircle",
 				}, SliderDraggable)
 
-        Custom:Create("UICorner", {CornerRadius = UDim.new(0, 0)}, SliderCircle) -- MODIFIKASI: DIBUAT KOTAK (0)
+        Custom:Create("UICorner", {CornerRadius = UDim.new(0, 4)}, SliderCircle) -- Kembali ke radius kecil
 
         Custom:Create("UIStroke", {
           Color = Custom.ColorRGB,
@@ -1920,7 +1918,7 @@ end
 
         local Input = Custom:Create("Frame", {
           BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-          BackgroundTransparency = 0.7, -- MODIFIKASI: Lebih solid (0.7)
+          BackgroundTransparency = 0.7, 
           BorderColor3 = Color3.fromRGB(0, 0, 0),
           BorderSizePixel = 0,
           LayoutOrder = ItemCount,
@@ -1929,7 +1927,7 @@ end
         }, SectionAdd)
 
         Custom:Create("UICorner", {
-          CornerRadius = UDim.new(0, 0), -- MODIFIKASI: DIBUAT KOTAK (0)
+          CornerRadius = UDim.new(0, 4), -- Kembali ke radius kecil
         }, Input)
 
         local InputTitle = Custom:Create("TextLabel", {
@@ -1998,7 +1996,7 @@ end
     
 
         Custom:Create("UICorner", {
-          CornerRadius = UDim.new(0, 0) -- MODIFIKASI: DIBUAT KOTAK (0)
+          CornerRadius = UDim.new(0, 4) -- Kembali ke radius kecil
         }, InputFrame)
 
         local InputTextBox = Custom:Create("TextBox", {
@@ -2053,7 +2051,7 @@ function Item:AddDropdown(Config)
 
     local Dropdown = Custom:Create("Frame", {
         BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-        BackgroundTransparency = 0.7, -- MODIFIKASI: Lebih solid (0.7)
+        BackgroundTransparency = 0.7, 
         BorderColor3 = Color3.fromRGB(0, 0, 0),
         BorderSizePixel = 0,
         LayoutOrder = ItemCount,
@@ -2075,7 +2073,7 @@ function Item:AddDropdown(Config)
     }, Dropdown)
 
     Custom:Create("UICorner", {
-        CornerRadius = UDim.new(0, 0) -- MODIFIKASI: DIBUAT KOTAK (0)
+        CornerRadius = UDim.new(0, 4) -- Kembali ke radius kecil
     }, Dropdown)
 
     local DropdownTitle = Custom:Create("TextLabel", {
@@ -2141,7 +2139,7 @@ function Item:AddDropdown(Config)
     }, Dropdown)
 
     Custom:Create("UICorner", {
-        CornerRadius = UDim.new(0, 0) -- MODIFIKASI: DIBUAT KOTAK (0)
+        CornerRadius = UDim.new(0, 4) -- Kembali ke radius kecil
     }, SelectOptionsFrame)
 
     DropdownButton.Activated:Connect(function()
@@ -2220,12 +2218,12 @@ function Item:AddDropdown(Config)
         Size = UDim2.new(1, -6, 0, 25),
         Position = UDim2.new(0, 3, 0, 3),
         Name = "SearchBar",
-        LayoutOrder = -1, -- Put search bar at the top
+        LayoutOrder = -1, 
         Parent = ScrollSelect
     })
 
     Custom:Create("UICorner", {
-        CornerRadius = UDim.new(0, 0) -- MODIFIKASI: DIBUAT KOTAK (0)
+        CornerRadius = UDim.new(0, 4) -- Kembali ke radius kecil
     }, SearchBar)
 
     Custom:Create("UIListLayout", {
@@ -2248,7 +2246,7 @@ function Item:AddDropdown(Config)
         
         -- Update canvas size after search
         local function UpdateCanvasSize()
-            local OffsetY = 28 -- Account for search bar
+            local OffsetY = 28 
             for _, child in ipairs(ScrollSelect:GetChildren()) do
                 if child.Name ~= "UIListLayout" and child.Name ~= "SearchBar" and child.Visible then
                     OffsetY = OffsetY + 3 + child.Size.Y.Offset
@@ -2322,11 +2320,11 @@ function Item:AddDropdown(Config)
             LayoutOrder = DropCount,
             Size = UDim2.new(1, 0, 0, 30),
             Name = "Option",
-            Visible = true -- Ensure options are visible by default
+            Visible = true 
         }, ScrollSelect)
 
         Custom:Create("UICorner", {
-            CornerRadius = UDim.new(0, 0) -- MODIFIKASI: DIBUAT KOTAK (0)
+            CornerRadius = UDim.new(0, 4) -- Kembali ke radius kecil
         }, Option)
 
         local OptionButton = Custom:Create("TextButton", {
@@ -2372,7 +2370,7 @@ function Item:AddDropdown(Config)
             Transparency = 0.999
         }, ChooseFrame)
 
-        Custom:Create("UICorner", {CornerRadius = UDim.new(0, 0)}, ChooseFrame) -- MODIFIKASI: DIBUAT KOTAK (0)
+        Custom:Create("UICorner", {CornerRadius = UDim.new(0, 4)}, ChooseFrame) -- Kembali ke radius kecil
 
         OptionButton.Activated:Connect(function()
             CircleClick(OptionButton, Player:GetMouse().X, Player:GetMouse().Y)
@@ -2401,9 +2399,8 @@ function Item:AddDropdown(Config)
     
         -- Update canvas size function - Fixed
         local function UpdateCanvasSize()
-            task.wait() -- Small delay to ensure layout has updated
-            local OffsetY = 28 -- Account for search bar height + padding
-            
+            task.wait() 
+            local OffsetY = 28 
             for _, child in ipairs(ScrollSelect:GetChildren()) do
                 if child.Name ~= "UIListLayout" and child.Name ~= "SearchBar" and child.Visible then
                     OffsetY = OffsetY + 3 + child.Size.Y.Offset
