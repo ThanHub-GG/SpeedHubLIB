@@ -253,7 +253,7 @@ function Speed_Library:SetNotification(Config)
         Name = "NotificationFrameReal"
     }, NotificationFrame)
 
-    Custom:Create("UICorner",{CornerRadius=UDim.new(0, 4)}, NotificationFrameReal) -- Kembali ke radius kecil
+    Custom:Create("UICorner",{CornerRadius=UDim.new(0, 4)}, NotificationFrameReal) 
     Custom:Create("UIGradient", {
         Color = ColorSequence.new{
             ColorSequenceKeypoint.new(0, Custom.BackgroundDark),
@@ -308,7 +308,7 @@ function Speed_Library:SetNotification(Config)
     })
 
     Custom:Create("UIStroke",{Color=Color3.fromRGB(255,255,255),Thickness=0.5,Parent=TextLabel})
-    Custom:Create("UICorner",{Parent=Top,CornerRadius=UDim.new(0, 4)}) -- Kembali ke radius kecil
+    Custom:Create("UICorner",{Parent=Top,CornerRadius=UDim.new(0, 4)}) 
 
     local TextLabel1 = Custom:Create("TextLabel", {
         Font=Enum.Font.GothamBold,
@@ -1080,8 +1080,8 @@ function Speed_Library:CreateWindow(Config)
             }, ScrolLayers)
     
             local SectionReal = Custom:Create("Frame", {
-                AnchorPoint = Vector2.new(0.5, 0),
                 BackgroundColor3 = Custom.FrameDark,
+                AnchorPoint = Vector2.new(0.5, 0),
                 BackgroundTransparency = 0.2,
                 BorderColor3 = Color3.fromRGB(0, 0, 0),
                 BorderSizePixel = 0,
@@ -1292,8 +1292,8 @@ function Item:AddParagraph(Config)
     local SettingFuncs = {}
 
     local Paragraph = Custom:Create("Frame", {
-        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-        BackgroundTransparency = 0.7, 
+        BackgroundColor3 = Custom.FrameDark, -- MODIFIKASI: Menggunakan warna FrameDark
+        BackgroundTransparency = 0.935, -- MODIFIKASI: Lebih gelap (0.935)
         BorderSizePixel = 0,
         LayoutOrder = ItemCount,
         Size = UDim2.new(1, 0, 0, 35),
@@ -1371,8 +1371,8 @@ end
         local Sep_Funcs = {}
 
         local Seperator = Custom:Create("Frame", {
-          BackgroundColor3 = Color3.fromRGB(70, 70, 70),
-          BackgroundTransparency = 0.1,
+          BackgroundColor3 = Custom.FrameDark, -- MODIFIKASI: Menggunakan warna FrameDark
+          BackgroundTransparency = 0.935, -- MODIFIKASI: Lebih gelap (0.935)
           BorderColor3 = Color3.fromRGB(0, 0, 0),
           BorderSizePixel = 1,
           LayoutOrder = ItemCount,
@@ -1423,8 +1423,8 @@ end
         local LineFuncs = {}
     
         local Line = Custom:Create("Frame", {
-          BackgroundColor3 = Color3.fromRGB(90, 90, 90),
-          BackgroundTransparency = 0.2,
+          BackgroundColor3 = Custom.FrameDark, -- MODIFIKASI: Menggunakan warna FrameDark
+          BackgroundTransparency = 0.7, -- Lebih tebal, karena ini garis pemisah
           BorderSizePixel = 0,
           LayoutOrder = ItemCount,
           Size = UDim2.new(1, 0, 0, 7),
@@ -1454,8 +1454,8 @@ end
 
         local Button = Custom:Create("Frame", {
 					Name = "Button",
-					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-					BackgroundTransparency = 0.7, 
+					BackgroundColor3 = Custom.FrameDark, -- MODIFIKASI: Menggunakan warna FrameDark
+					BackgroundTransparency = 0.935, -- MODIFIKASI: Lebih gelap (0.935)
 					BorderSizePixel = 0,
 					LayoutOrder = ItemCount,
 					Size = UDim2.new(1, 0, 0, 35)
@@ -1571,12 +1571,12 @@ function Item:AddToggle(Config)
     local Funcs_Toggle = {Value = Default}
 
     local Toggle = Custom:Create("Frame", {
-        Name = "Toggle",
-        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-        BackgroundTransparency = 0.7, 
+        BackgroundColor3 = Custom.FrameDark, -- MODIFIKASI: Menggunakan warna FrameDark
+        BackgroundTransparency = 0.935, -- MODIFIKASI: Lebih gelap (0.935)
         BorderSizePixel = 0,
         LayoutOrder = ItemCount,
-        Size = UDim2.new(1, 0, 0, 35)
+        Size = UDim2.new(1, 0, 0, 35),
+        Name = "Toggle",
     }, SectionAdd)
 
     Custom:Create("UICorner", { CornerRadius = UDim.new(0, 4) }, Toggle) -- Kembali ke radius kecil
@@ -1634,7 +1634,7 @@ function Item:AddToggle(Config)
     local FeatureFrame = Custom:Create("Frame", {
         Name = "FeatureFrame",
         AnchorPoint = Vector2.new(1, 0.5),
-        BackgroundColor3 = (Mode == "Toggle") and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(0, 0, 0),
+        BackgroundColor3 = (Mode == "Toggle") and Color3.fromRGB(255, 255, 255) or Custom.FrameDark, -- MODIFIKASI: Default Box menggunakan FrameDark
         BackgroundTransparency = (Mode == "Toggle") and 0.92 or 0.3,
         BorderSizePixel = 0,
         Position = UDim2.new(1, -15, 0.5, 0),
@@ -1676,8 +1676,8 @@ function Item:AddToggle(Config)
             TweenService:Create(FeatureFrame, tweenInfo, {BackgroundColor3 = FrameColor, BackgroundTransparency = FrameTransparency}):Play()
         else
             -- Mode Box simple nyala/mati
-            local FrameColor = Value and Custom.ColorRGB or Color3.fromRGB(0,0,0)
-            local Transparency = Value and 0 or 0.3
+            local FrameColor = Value and Custom.ColorRGB or Custom.FrameDark -- MODIFIKASI: Box warna FrameDark
+            local Transparency = Value and 0.3 or 0.3 -- Box selalu transparan 0.3
             TweenService:Create(FeatureFrame, TweenInfo.new(0.2), {BackgroundColor3 = FrameColor, BackgroundTransparency = Transparency}):Play()
         end
     end
@@ -1709,8 +1709,8 @@ end
 				local Funcs_Slider = {Value = Default}
         
         local Slider = Custom:Create("Frame", {
-					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-					BackgroundTransparency = 0.7, 
+					BackgroundColor3 = Custom.FrameDark, -- MODIFIKASI: Menggunakan warna FrameDark
+					BackgroundTransparency = 0.935, -- MODIFIKASI: Lebih gelap (0.935)
 					BorderColor3 = Color3.fromRGB(0, 0, 0),
 					BorderSizePixel = 0,
 					LayoutOrder = ItemCount,
@@ -1799,7 +1799,7 @@ end
 
         local SliderFrame = Custom:Create("Frame", {
 					AnchorPoint = Vector2.new(1, 0.5),
-					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+					BackgroundColor3 = Custom.FrameDark, -- MODIFIKASI: Menggunakan warna FrameDark
 					BackgroundTransparency = 0.800000011920929,
 					BorderColor3 = Color3.fromRGB(0, 0, 0),
 					BorderSizePixel = 0,
@@ -1917,8 +1917,8 @@ end
 				local Funcs_Input = {Value = Default}
 
         local Input = Custom:Create("Frame", {
-          BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-          BackgroundTransparency = 0.7, 
+          BackgroundColor3 = Custom.FrameDark, -- MODIFIKASI: Menggunakan warna FrameDark
+          BackgroundTransparency = 0.935, -- MODIFIKASI: Lebih gelap (0.935)
           BorderColor3 = Color3.fromRGB(0, 0, 0),
           BorderSizePixel = 0,
           LayoutOrder = ItemCount,
@@ -1984,7 +1984,7 @@ end
 
         local InputFrame = Custom:Create("Frame", {
           AnchorPoint = Vector2.new(1, 0.5),
-          BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+          BackgroundColor3 = Custom.FrameDark, -- MODIFIKASI: Menggunakan warna FrameDark
           BackgroundTransparency = 0.95,
           BorderColor3 = Color3.fromRGB(0, 0, 0),
           BorderSizePixel = 0,
@@ -2050,8 +2050,8 @@ function Item:AddDropdown(Config)
     local Funcs_Dropdown = {Value = Default, Options = Options}
 
     local Dropdown = Custom:Create("Frame", {
-        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-        BackgroundTransparency = 0.7, 
+        BackgroundColor3 = Custom.FrameDark, -- MODIFIKASI: Menggunakan warna FrameDark
+        BackgroundTransparency = 0.935, -- MODIFIKASI: Lebih gelap (0.935)
         BorderColor3 = Color3.fromRGB(0, 0, 0),
         BorderSizePixel = 0,
         LayoutOrder = ItemCount,
@@ -2128,7 +2128,7 @@ function Item:AddDropdown(Config)
 
     local SelectOptionsFrame = Custom:Create("Frame", {
         AnchorPoint = Vector2.new(1, 0.5),
-        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+        BackgroundColor3 = Custom.FrameDark, -- MODIFIKASI: Menggunakan warna FrameDark
         BackgroundTransparency = 0.95,
         BorderColor3 = Color3.fromRGB(0, 0, 0),
         BorderSizePixel = 0,
@@ -2191,7 +2191,7 @@ function Item:AddDropdown(Config)
 
     local ScrollSelect = Custom:Create("ScrollingFrame", {
         CanvasSize = UDim2.new(0, 0, 0, 0),
-        ScrollBarImageColor3 = Color3.fromRGB(0, 0, 0),
+        ScrollBarImageColor3 = Custom.ColorRGB,
         ScrollBarThickness = 0,
         Active = true,
         LayoutOrder = CountDropdown,
@@ -2211,7 +2211,7 @@ function Item:AddDropdown(Config)
         Text = "",
         TextColor3 = Color3.fromRGB(255, 255, 255),
         TextSize = 12,
-        BackgroundColor3 = Color3.fromRGB(30, 30, 30),
+        BackgroundColor3 = Custom.FrameDark, -- MODIFIKASI: Menggunakan warna FrameDark
         BackgroundTransparency = 0.3,
         BorderColor3 = Color3.fromRGB(80, 80, 80),
         BorderSizePixel = 1,
@@ -2246,12 +2246,14 @@ function Item:AddDropdown(Config)
         
         -- Update canvas size after search
         local function UpdateCanvasSize()
+            task.wait() 
             local OffsetY = 28 
             for _, child in ipairs(ScrollSelect:GetChildren()) do
                 if child.Name ~= "UIListLayout" and child.Name ~= "SearchBar" and child.Visible then
                     OffsetY = OffsetY + 3 + child.Size.Y.Offset
                 end
             end
+
             ScrollSelect.CanvasSize = UDim2.new(0, 0, 0, OffsetY)
         end
         UpdateCanvasSize()
@@ -2293,6 +2295,7 @@ function Item:AddDropdown(Config)
                             TweenService:Create(stroke, tweenInfoInOut, {Transparency = Transparency}):Play()
                         end
                     end
+                    Drop.BackgroundColor3 = isTextFound and Custom.FrameDark or Color3.fromRGB(255, 255, 255) -- MODIFIKASI: Option aktif menggunakan FrameDark
                     TweenService:Create(Drop, tweenInfoInOut, {BackgroundTransparency = BackgroundTransparency}):Play()
                 end
             end
