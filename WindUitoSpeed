@@ -1007,24 +1007,29 @@ function Speed_Library:CreateWindow(Config)
             }, ChooseFrame)
         end
 
-        TabButton.Activated:Connect(function()
+TabButton.Activated:Connect(function()
             CircleClick(TabButton, Player:GetMouse().X, Player:GetMouse().Y)
             local FrameChoose = nil
 
+            -- Mencari FrameChoose yang sudah ada, terlepas dari di Tab mana dia berada
             for _, s in pairs(ScrollTab:GetChildren()) do
-                for _, v in pairs(s:GetChildren()) do
-                    if v.Name == "ChooseFrame" then
-                        FrameChoose = v
+                if s:IsA("Frame") then
+                    local chooseFrame = s:FindFirstChild("ChooseFrame")
+                    if chooseFrame then
+                        FrameChoose = chooseFrame
                         break
                     end
                 end
-
-                if FrameChoose then break end
             end
     
             if FrameChoose and Tab.LayoutOrder ~= LayersPageLayout.CurrentPage.LayoutOrder then
+                
+                -- **PERBAIKAN KRITIS 1: Pindahkan FrameChoose menjadi anak dari Tab yang baru diklik**
+                FrameChoose.Parent = Tab 
+                
+                -- Reset transparansi tab lain (kode yang sudah ada)
                 for _, TabFrame in pairs(ScrollTab:GetChildren()) do
-                    if TabFrame.Name == "Tab" then
+                    if TabFrame.Name == "Tab" and TabFrame ~= Tab then
                         local stroke = TabFrame:FindFirstChild("UIStroke")
                         TweenService:Create(TabFrame, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.InOut), {BackgroundTransparency = 0.7}):Play()
                         if stroke then
@@ -1037,8 +1042,10 @@ function Speed_Library:CreateWindow(Config)
                 local _TabStroke = TweenService:Create(Tab:FindFirstChild("UIStroke"), TweenInfo.new(0.6, Enum.EasingStyle.Back, Enum.EasingDirection.InOut), {Transparency = 0.2})
                 
                 -- MODIFIKASI: Animasi bar penunjuk tab
+                -- **PERBAIKAN KRITIS 2: Tween FrameChoose ke posisi (0, 0) relatif terhadap Tab baru.**
+                -- Posisi (0, 0) berarti di sudut kiri atas Tab.
                 local _FTween = TweenService:Create(FrameChoose, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {
-                    Position = UDim2.new(0, 0, (37 * Tab.LayoutOrder), 0) -- Diubah agar pergerakan berdasarkan LayoutOrder
+                    Position = UDim2.new(0, 0, 0, 0) 
                 })
     
                 _TabT:Play()
@@ -1050,7 +1057,7 @@ function Speed_Library:CreateWindow(Config)
                 task.wait(0.05)
                 NameTab.Text = _Name
     
-                -- Animasi sedikit melebar ke samping (opsional, bisa dihapus)
+                -- Animasi ukuran (tetap dipertahankan)
                 TweenService:Create(FrameChoose, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Size = UDim2.new(0, 4, 1, 0)}):Play()
     
                 task.wait(0.2)
