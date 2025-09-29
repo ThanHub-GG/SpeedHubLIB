@@ -2250,7 +2250,7 @@ function Item:AddDropdown(Config)
         Font = Enum.Font.GothamBold,
         Text = "",
         TextColor3 = Color3.fromRGB(255, 255, 255),
-        TextSize = 15,
+        TextSize = 14,
         TextTransparency = 0.6,
         TextWrapped = true,
         TextXAlignment = Enum.TextXAlignment.Left,
@@ -2449,7 +2449,7 @@ function Item:AddDropdown(Config)
         local OptionText = Custom:Create("TextLabel", {
             Font = Enum.Font.GothamBold,
             Text = OptionName,
-			TextSize = 15,
+			TextSize = 14,
             TextColor3 = Color3.fromRGB(255, 255, 255), -- Putih nyala
             TextStrokeColor3 = Color3.fromRGB(20, 20, 20),
             TextStrokeTransparency = 0.7,
