@@ -648,7 +648,6 @@ function Speed_Library:CreateWindow(Config)
         TextSize = 24,
         TextWrapped = true,
         TextXAlignment = Enum.TextXAlignment.Left,
-        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
         BackgroundTransparency = 0.9990000128746033,
         BorderColor3 = Color3.fromRGB(0, 0, 0),
         BorderSizePixel = 0,
@@ -933,7 +932,6 @@ function Speed_Library:CreateWindow(Config)
             TextColor3 = Color3.fromRGB(255, 255, 255),
             TextSize = 13,
             TextXAlignment = Enum.TextXAlignment.Left,
-            BackgroundColor3 = Color3.fromRGB(255, 255, 255),
             BackgroundTransparency = 0.999,
             BorderColor3 = Color3.fromRGB(0, 0, 0),
             BorderSizePixel = 0,
@@ -947,7 +945,6 @@ function Speed_Library:CreateWindow(Config)
             TextColor3 = Color3.fromRGB(255, 255, 255),
             TextSize = 13,
             TextXAlignment = Enum.TextXAlignment.Left,
-            BackgroundColor3 = Color3.fromRGB(255, 255, 255),
             BackgroundTransparency = 0.9990000128746033,
             BorderColor3 = Color3.fromRGB(0, 0, 0),
             BorderSizePixel = 0,
@@ -965,7 +962,6 @@ function Speed_Library:CreateWindow(Config)
         Custom:Create("ImageLabel", {
             Image = Icon,
             ImageColor3 = Custom.ColorRGB,
-            BackgroundColor3 = Color3.fromRGB(255, 255, 255),
             BackgroundTransparency = 0.999,
             BorderColor3 = Color3.fromRGB(0, 0, 0),
             BorderSizePixel = 0,
@@ -1114,7 +1110,6 @@ function Speed_Library:CreateWindow(Config)
                 Text = "",
                 TextColor3 = Color3.fromRGB(0, 0, 0),
                 TextSize = 14,
-                BackgroundColor3 = Color3.fromRGB(255, 255, 255),
                 BackgroundTransparency = 0.999,
                 BorderColor3 = Color3.fromRGB(0, 0, 0),
                 BorderSizePixel = 0,
@@ -1141,7 +1136,6 @@ function Speed_Library:CreateWindow(Config)
                 Image = "rbxassetid://16851841101",
                 ImageColor3 = Color3.fromRGB(255, 255, 255),
                 AnchorPoint = Vector2.new(0.5, 0.5),
-                BackgroundColor3 = Color3.fromRGB(255, 255, 255),
                 BackgroundTransparency = 0.9990000128746033,
                 BorderColor3 = Color3.fromRGB(0, 0, 0),
                 BorderSizePixel = 0,
@@ -1160,7 +1154,6 @@ function Speed_Library:CreateWindow(Config)
                 TextSize = 14,
                 TextXAlignment = Enum.TextXAlignment.Left,
                 TextYAlignment = Enum.TextYAlignment.Center,
-                BackgroundColor3 = Color3.fromRGB(255, 255, 255),
                 BackgroundTransparency = 0.9990000128746033,
                 BorderColor3 = Color3.fromRGB(0, 0, 0),
                 BorderSizePixel = 0,
@@ -1194,7 +1187,6 @@ function Speed_Library:CreateWindow(Config)
   
       local SectionAdd = Custom:Create("Frame", {
         AnchorPoint = Vector2.new(0.5, 0),
-        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
         BackgroundTransparency = 0.9990000128746033,
         BorderColor3 = Color3.fromRGB(0, 0, 0),
         BorderSizePixel = 0,
@@ -1516,7 +1508,6 @@ end
 					TextTransparency = 0.6,
 					TextXAlignment = Enum.TextXAlignment.Left,
 					TextYAlignment = Enum.TextYAlignment.Bottom,
-					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 					BackgroundTransparency = 0.999,
 					BorderSizePixel = 0,
 					Position = UDim2.new(0, 10, 0, 23),
@@ -1552,7 +1543,6 @@ end
 					Text = "",
 					TextColor3 = Color3.fromRGB(0, 0, 0),
 					TextSize = 14,
-					BackgroundColor3 = Color3.fromRGB(0, 0, 0),
 					BackgroundTransparency = 0.999,
 					BorderSizePixel = 0,
 					Size = UDim2.new(1, 0, 1, 0)
@@ -1577,7 +1567,6 @@ end
           Image = Icon,
           ImageColor3 = Color3.fromRGB(255, 255, 255), 
           AnchorPoint = Vector2.new(0.5, 0.5),
-          BackgroundColor3 = Color3.fromRGB(255, 255, 255),
           BackgroundTransparency = 0.999,
           BorderSizePixel = 0,
           Position = UDim2.new(0.5, 0, 0.5, 0),
@@ -1849,7 +1838,6 @@ end
 					TextColor3 = Color3.fromRGB(255, 255, 255),
 					TextSize = 13,
 					TextWrapped = true,
-					BackgroundColor3 = Color3.fromRGB(0, 0, 0),
 					BackgroundTransparency = 0.9990000128746033,
 					BorderColor3 = Color3.fromRGB(0, 0, 0),
 					BorderSizePixel = 0,
@@ -2088,10 +2076,14 @@ end
           TextColor3 = Color3.fromRGB(255, 255, 255),
           TextSize = 12,
           TextXAlignment = Enum.TextXAlignment.Left,
+          -- Posisi yang benar untuk InputTextBox (di tengah vertikal)
+          AnchorPoint = Vector2.new(0, 0.5), 
+          Position = UDim2.new(0, 5, 0.5, 0), -- MODIFIKASI: Ditetapkan ke 0.5, 0 agar di tengah
+          -- End Posisi
+
           BackgroundTransparency = 0.999,
           BorderColor3 = Color3.fromRGB(0, 0, 0),
           BorderSizePixel = 0,
-          Position = UDim2.new(0, 5, 0.5, 0),
           Size = UDim2.new(1, -10, 1, -8),
           Name = "InputTextBox"
         }, InputFrame)
@@ -2262,10 +2254,15 @@ function Item:AddDropdown(Config)
         TextTransparency = 0.6,
         TextWrapped = true,
         TextXAlignment = Enum.TextXAlignment.Left,
+        
+        -- Posisi yang benar untuk OptionSelecting (di tengah vertikal)
+        AnchorPoint = Vector2.new(0, 0.5), 
+        Position = UDim2.new(0, 5, 0.5, 0), -- MODIFIKASI: Ditetapkan ke 0.5, 0 agar di tengah
+        -- End Posisi
+
         BackgroundTransparency = 0.999,
         BorderColor3 = Color3.fromRGB(0, 0, 0),
         BorderSizePixel = 0,
-        Position = UDim2.new(0, 5, 0.5, 0),
         Size = UDim2.new(1, -30, 1, -8),
         Name = "OptionSelecting",
     }, SelectOptionsFrame)
@@ -2452,7 +2449,6 @@ function Item:AddDropdown(Config)
         local OptionText = Custom:Create("TextLabel", {
             Font = Enum.Font.GothamBold,
             Text = OptionName,
-            TextSize = 13,
             TextColor3 = Color3.fromRGB(255, 255, 255), -- Putih nyala
             TextStrokeColor3 = Color3.fromRGB(20, 20, 20),
             TextStrokeTransparency = 0.7,
