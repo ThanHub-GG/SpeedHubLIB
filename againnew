@@ -718,24 +718,94 @@ function Speed_Library:CreateWindow(Config)
     ScrollTab.ChildAdded:Connect(UpdateSize)
     ScrollTab.ChildRemoved:Connect(UpdateSize)
 
+  -- =========================================================================
+    -- FUNGSI ANIMASI LOAD & UNLOAD
+    -- =========================================================================
+
+    function Funcs:Load()
+        -- 1. Animasi Blur Latar Belakang
+        MoreBlurScreen.Visible = true
+        
+        local tweenInfoBlur = TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+        local blurTween = TweenService:Create(BlurEffect, tweenInfoBlur, {BackgroundTransparency = 0.75}) 
+        blurTween:Play()
+
+        -- 2. Animasi Jendela Utama (DropShadowHolder)
+        local tweenInfoMain = TweenInfo.new(0.6, Enum.EasingStyle.OutBack, Enum.EasingDirection.Out)
+        local targetSize = SizeUi
+
+        local mainTween = TweenService:Create(DropShadowHolder, tweenInfoMain, {
+            Size = targetSize,
+            BackgroundTransparency = 1 -- Sudah 1, tapi untuk jaga-jaga
+        })
+
+        mainTween:Play()
+    end
+
+    function Funcs:Unload()
+        local tweenInfoMain = TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
+
+        -- 1. Animasi Jendela Utama (mengecil)
+        local mainTween = TweenService:Create(DropShadowHolder, tweenInfoMain, {
+            Size = UDim2.new(0.1, 0, 0.1, 0) 
+        })
+        
+        -- 2. Animasi Blur Latar Belakang (menghilang)
+        local tweenInfoBlur = TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+        local blurTween = TweenService:Create(BlurEffect, tweenInfoBlur, {BackgroundTransparency = 1}) 
+
+        mainTween:Play()
+        blurTween:Play()
+
+        -- Tunggu hingga animasi selesai, lalu hancurkan
+        mainTween.Completed:Wait() 
+        
+        if SpeedHubXGui then SpeedHubXGui:Destroy() end
+        if not Speed_Library.Unloaded then Speed_Library.Unloaded = true end
+    end
+
+    -- =========================================================================
+    -- LISTENER TOMBOL (Diperbarui dengan animasi)
+    -- =========================================================================
+
     Min.Activated:Connect(function()
         CircleClick(Min, Player:GetMouse().X, Player:GetMouse().Y)
-        DropShadowHolder.Visible = false
+        
+        local tweenInfoMin = TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
+        local mainTween = TweenService:Create(DropShadowHolder, tweenInfoMin, {
+            Size = UDim2.new(0.1, 0, 0.1, 0)
+        })
+        
+        local tweenInfoBlur = TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+        local blurTween = TweenService:Create(BlurEffect, tweenInfoBlur, {BackgroundTransparency = 1}) 
+        
+        mainTween:Play()
+        blurTween:Play()
 
+        mainTween.Completed:Wait() 
+        DropShadowHolder.Visible = false
+        MoreBlurScreen.Visible = false
+        
         if not Open_Close.Visible then Open_Close.Visible = true end
     end)
 
     Open_Close.Activated:Connect(function()
         DropShadowHolder.Visible = true
+        -- Saat dibuka dari minimize, panggil Load untuk animasi pembuka
+        Funcs:Load() 
         if Open_Close.Visible then Open_Close.Visible = false end
     end)
 
     Close.Activated:Connect(function()
         CircleClick(Close, Player:GetMouse().X, Player:GetMouse().Y)
-        if SpeedHubXGui then SpeedHubXGui:Destroy() end
-        if not Speed_Library.Unloaded then Speed_Library.Unloaded = true end
+        -- Panggil fungsi Unload yang menangani animasi dan penghancuran
+        Funcs:Unload() 
     end)
 
+    -- =========================================================================
+    -- SISANYA
+    -- =========================================================================
+    
     DropShadowHolder.Size = UDim2.new(0, 115 + TextLabel.TextBounds.X + 1 + TextLabel1.TextBounds.X, 0, 350)
     MakeDraggable(Top, DropShadowHolder)
 
@@ -792,9 +862,7 @@ function Speed_Library:CreateWindow(Config)
         Text = "",
         TextColor3 = Color3.fromRGB(0, 0, 0),
         TextSize = 14,
-        BackgroundColor3 = Color3.fromRGB(255, 255, 255),
         BackgroundTransparency = 0.999,
-        BorderColor3 = Color3.fromRGB(0, 0, 0),
         BorderSizePixel = 0,
         Size = UDim2.new(1, 0, 1, 0),
         Name = "ConnectButton",
@@ -803,7 +871,6 @@ function Speed_Library:CreateWindow(Config)
     local DropdownSelect = Custom:Create("Frame", {
         AnchorPoint = Vector2.new(1, 0.5),
         BackgroundColor3 = Custom.FrameDark,
-        BorderColor3 = Color3.fromRGB(0, 0, 0),
         BorderSizePixel = 0,
         LayoutOrder = 1,
         Position = UDim2.new(1, 172, 0.5, 0),
@@ -847,9 +914,7 @@ function Speed_Library:CreateWindow(Config)
 
     local DropdownSelectReal = Custom:Create("Frame", {
         AnchorPoint = Vector2.new(0.5, 0.5),
-        BackgroundColor3 = Color3.fromRGB(0, 0, 0),
         BackgroundTransparency = 0.999,
-        BorderColor3 = Color3.fromRGB(0, 0, 0),
         BorderSizePixel = 0,
         LayoutOrder = 1,
         Position = UDim2.new(0.5, 0, 0.5, 0),
@@ -870,6 +935,15 @@ function Speed_Library:CreateWindow(Config)
         Name = "DropPageLayout",
     }, DropdownFolder)
 
+    -- =========================================================================
+    -- MEMULAI ANIMASI LOAD
+    -- =========================================================================
+    task.spawn(function()
+        Funcs:Load()
+    end)
+
+    return Funcs
+end
     -- Create Tab Function
     local Tabs = {}
     local CountTab = 0
