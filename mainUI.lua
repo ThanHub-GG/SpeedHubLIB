@@ -91,6 +91,8 @@ function ThanHubLib:CreateWindow(yourTitle, yourDesc, titleList)
     ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling 
 
     local OverlayLayer = Instance.new("Frame")
+
+
     OverlayLayer.Name = "OverlayLayer"
     OverlayLayer.Size = UDim2.new(1, 0, 1, 0)
     OverlayLayer.BackgroundTransparency = 1
@@ -1150,6 +1152,7 @@ end)
     return WindowFunctions
 end
 
+return ThanHubLib
 -- local Window = ThanHubLib:CreateWindow("ThanHub Script", "Game : Unknown", {"Premium Version", "ThanHub | Best Script"}) -- yg didalam {} hanya optional saja
 -- local Tab1 = Window:AddTab("Main")
 -- local Tab2 = Window:AddTab("Misc")
