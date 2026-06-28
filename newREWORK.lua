@@ -17,70 +17,6 @@ ConfigData       = {}
 Elements         = {}
 CURRENT_VERSION  = nil
 
---------------------------------------------------
--- ThanHub Animator
---------------------------------------------------
-
-local UIAnimator = {}
-
-function UIAnimator:Tween(obj,time,style,direction,props)
-    if not obj then return end
-
-    local tween = TweenService:Create(
-        obj,
-        TweenInfo.new(
-            time,
-            style or Enum.EasingStyle.Quint,
-            direction or Enum.EasingDirection.Out
-        ),
-        props
-    )
-
-    tween:Play()
-
-    return tween
-end
-
-function UIAnimator:Fade(gui, transparency)
-
-    local objects = {gui}
-
-    for _,v in ipairs(gui:GetDescendants()) do
-        table.insert(objects,v)
-    end
-
-    for _,v in ipairs(objects) do
-
-        if v:IsA("Frame") then
-
-            self:Tween(v,.25,nil,nil,{
-                BackgroundTransparency = transparency
-            })
-
-        elseif v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
-
-            self:Tween(v,.25,nil,nil,{
-                BackgroundTransparency = transparency,
-                TextTransparency = transparency
-            })
-
-        elseif v:IsA("ImageLabel") or v:IsA("ImageButton") then
-
-            self:Tween(v,.25,nil,nil,{
-                BackgroundTransparency = transparency,
-                ImageTransparency = transparency
-            })
-
-        elseif v:IsA("UIStroke") then
-
-            self:Tween(v,.25,nil,nil,{
-                Transparency = transparency
-            })
-
-        end
-    end
-end
-
 function SaveConfig()
     if writefile then
         ConfigData._version = CURRENT_VERSION
@@ -615,53 +551,15 @@ function Chloex:Window(GuiConfig)
         Main.BackgroundTransparency = 0
     end
 
-    Main.AnchorPoint = Vector2.new(0.5,0.5)
-    Main.Position = UDim2.new(.5,0,.5,0)
-    Main.Size = UDim2.new(1,-47,1,-47)
-
-    local MainScale = Instance.new("UIScale")
-    MainScale.Scale = 0
-    MainScale.Parent = Main
-
-    Main.Visible = false
+    Main.AnchorPoint = Vector2.new(0.5, 0.5)
+    Main.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Main.BorderSizePixel = 0
+    Main.Position = UDim2.new(0.5, 0, 0.5, 0)
+    Main.Size = UDim2.new(1, -47, 1, -47)
     Main.Name = "Main"
     Main.Parent = DropShadow
 
     UICorner.Parent = Main
-
---------------------------------------------------
--- OPEN ANIMATION
---------------------------------------------------
-
-task.defer(function()
-
-    Main.Visible = true
-
-    TweenService:Create(
-        MainScale,
-        TweenInfo.new(
-            0.45,
-            Enum.EasingStyle.Back,
-            Enum.EasingDirection.Out
-        ),
-        {
-            Scale = 1
-        }
-    ):Play()
-
-    TweenService:Create(
-        DropShadow,
-        TweenInfo.new(
-            0.35,
-            Enum.EasingStyle.Quint,
-            Enum.EasingDirection.Out
-        ),
-        {
-            ImageTransparency = 0.35
-        }
-    ):Play()
-
-end)
 
     Top.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
     Top.BackgroundTransparency = 0.9990000128746033
@@ -1308,216 +1206,121 @@ end)
         --// Section
         local Sections = {}
         local CountSection = 0
-        function Sections:AddSection(Title, AlwaysOpen)
-            local Title = Title or "Title"
-            local Section = Instance.new("Frame");
-            local SectionDecideFrame = Instance.new("Frame");
-            local UICorner1 = Instance.new("UICorner");
-            local UIGradient = Instance.new("UIGradient");
+        local function ApplyHoverEffect(button, frame)
+            button.MouseEnter:Connect(function()
+                TweenService:Create(frame, TweenInfo.new(0.3), { BackgroundTransparency = 0.9 }):Play()
+            end)
+            button.MouseLeave:Connect(function()
+                TweenService:Create(frame, TweenInfo.new(0.3), { BackgroundTransparency = 0.935 }):Play()
+            end)
+        end
+function Sections:AddSection(Title, AlwaysOpen)
+    local Title = Title or "Title"
+    
+    -- 1. Setup Frame Utama
+    local Section = Instance.new("Frame")
+    Section.Name = "Section"
+    Section.Size = UDim2.new(1, 0, 0, 35)
+    Section.BackgroundTransparency = 1
+    Section.ClipsDescendants = true
+    Section.Parent = ScrolLayers
 
-            Section.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-            Section.BackgroundTransparency = 0.9990000128746033
-            Section.BorderColor3 = Color3.fromRGB(0, 0, 0)
-            Section.BorderSizePixel = 0
-            Section.LayoutOrder = CountSection
-            Section.ClipsDescendants = true
-            Section.LayoutOrder = 1
-            Section.Size = UDim2.new(1, 0, 0, 30)
-            Section.Name = "Section"
-            Section.Parent = ScrolLayers
+    -- 2. Setup Background Section
+    local SectionReal = Instance.new("Frame", Section)
+    SectionReal.Size = UDim2.new(1, 0, 0, 35)
+    SectionReal.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    SectionReal.BackgroundTransparency = 0.935
+    SectionReal.BorderSizePixel = 0
+    
+    local UICorner = Instance.new("UICorner", SectionReal)
+    UICorner.CornerRadius = UDim.new(0, 6)
 
-            local SectionReal = Instance.new("Frame");
-            local UICorner = Instance.new("UICorner");
-            local UIStroke = Instance.new("UIStroke");
-            local SectionButton = Instance.new("TextButton");
-            local FeatureFrame = Instance.new("Frame");
-            local FeatureImg = Instance.new("ImageLabel");
-            local SectionTitle = Instance.new("TextLabel");
+    local Stroke = Instance.new("UIStroke", SectionReal)
+    Stroke.Transparency = 0.8
+    Stroke.Color = Color3.fromRGB(255, 255, 255)
 
-            SectionReal.AnchorPoint = Vector2.new(0.5, 0)
-            SectionReal.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-            SectionReal.BackgroundTransparency = 0.9350000023841858
-            SectionReal.BorderColor3 = Color3.fromRGB(0, 0, 0)
-            SectionReal.BorderSizePixel = 0
-            SectionReal.LayoutOrder = 1
-            SectionReal.Position = UDim2.new(0.5, 0, 0, 0)
-            SectionReal.Size = UDim2.new(1, 1, 0, 30)
-            SectionReal.Name = "SectionReal"
-            SectionReal.Parent = Section
+    -- 3. Header & UI
+    local SectionButton = Instance.new("TextButton", SectionReal)
+    SectionButton.BackgroundTransparency = 1
+    SectionButton.Size = UDim2.new(1, 0, 1, 0)
+    SectionButton.Text = ""
 
-            UICorner.CornerRadius = UDim.new(0, 4)
-            UICorner.Parent = SectionReal
+    local FeatureFrame = Instance.new("Frame", SectionReal)
+    FeatureFrame.Size = UDim2.new(0, 25, 0, 25)
+    FeatureFrame.Position = UDim2.new(1, -10, 0.5, 0)
+    FeatureFrame.AnchorPoint = Vector2.new(1, 0.5)
+    FeatureFrame.BackgroundTransparency = 1
 
-            SectionButton.Font = Enum.Font.SourceSans
-            SectionButton.Text = ""
-            SectionButton.TextColor3 = Color3.fromRGB(0, 0, 0)
-            SectionButton.TextSize = 14
-            SectionButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-            SectionButton.BackgroundTransparency = 0.9990000128746033
-            SectionButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
-            SectionButton.BorderSizePixel = 0
-            SectionButton.Size = UDim2.new(1, 0, 1, 0)
-            SectionButton.Name = "SectionButton"
-            SectionButton.Parent = SectionReal
+    local FeatureImg = Instance.new("ImageLabel", FeatureFrame)
+    FeatureImg.Image = "rbxassetid://16851841101"
+    FeatureImg.Size = UDim2.new(0, 18, 0, 18)
+    FeatureImg.Position = UDim2.new(0.5, 0, 0.5, 0)
+    FeatureImg.AnchorPoint = Vector2.new(0.5, 0.5)
+    FeatureImg.BackgroundTransparency = 1
+    FeatureImg.Rotation = -90
 
-            FeatureFrame.AnchorPoint = Vector2.new(1, 0.5)
-            FeatureFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-            FeatureFrame.BackgroundTransparency = 0.9990000128746033
-            FeatureFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
-            FeatureFrame.BorderSizePixel = 0
-            FeatureFrame.Position = UDim2.new(1, -5, 0.5, 0)
-            FeatureFrame.Size = UDim2.new(0, 20, 0, 20)
-            FeatureFrame.Name = "FeatureFrame"
-            FeatureFrame.Parent = SectionReal
+    local SectionTitle = Instance.new("TextLabel", SectionReal)
+    SectionTitle.Font = Enum.Font.GothamBold
+    SectionTitle.Text = "  " .. Title
+    SectionTitle.TextColor3 = Color3.fromRGB(230, 230, 230)
+    SectionTitle.TextSize = 13
+    SectionTitle.TextXAlignment = Enum.TextXAlignment.Left
+    SectionTitle.Size = UDim2.new(1, -30, 1, 0)
+    SectionTitle.BackgroundTransparency = 1
 
-            FeatureImg.Image = "rbxassetid://16851841101"
-            FeatureImg.AnchorPoint = Vector2.new(0.5, 0.5)
-            FeatureImg.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-            FeatureImg.BackgroundTransparency = 0.9990000128746033
-            FeatureImg.BorderColor3 = Color3.fromRGB(0, 0, 0)
-            FeatureImg.BorderSizePixel = 0
-            FeatureImg.Position = UDim2.new(0.5, 0, 0.5, 0)
-            FeatureImg.Rotation = -90
-            FeatureImg.Size = UDim2.new(1, 6, 1, 6)
-            FeatureImg.Name = "FeatureImg"
-            FeatureImg.Parent = FeatureFrame
+    -- 4. Gradient Efek
+    local UIGradient = Instance.new("UIGradient", SectionReal)
+    UIGradient.Rotation = 90
+    UIGradient.Transparency = NumberSequence.new({
+        NumberSequenceKeypoint.new(0, 0.8),
+        NumberSequenceKeypoint.new(1, 0.9)
+    })
 
-            SectionTitle.Font = Enum.Font.GothamBold
-            SectionTitle.Text = Title
-            SectionTitle.TextColor3 = Color3.fromRGB(230.77499270439148, 230.77499270439148, 230.77499270439148)
-            SectionTitle.TextSize = 13
-            SectionTitle.TextXAlignment = Enum.TextXAlignment.Left
-            SectionTitle.TextYAlignment = Enum.TextYAlignment.Top
-            SectionTitle.AnchorPoint = Vector2.new(0, 0.5)
-            SectionTitle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-            SectionTitle.BackgroundTransparency = 0.9990000128746033
-            SectionTitle.BorderColor3 = Color3.fromRGB(0, 0, 0)
-            SectionTitle.BorderSizePixel = 0
-            SectionTitle.Position = UDim2.new(0, 10, 0.5, 0)
-            SectionTitle.Size = UDim2.new(1, -50, 0, 13)
-            SectionTitle.Name = "SectionTitle"
-            SectionTitle.Parent = SectionReal
+    ApplyHoverEffect(SectionButton, SectionReal)
 
-            SectionDecideFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-            SectionDecideFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
-            SectionDecideFrame.AnchorPoint = Vector2.new(0.5, 0)
-            SectionDecideFrame.BorderSizePixel = 0
-            SectionDecideFrame.Position = UDim2.new(0.5, 0, 0, 33)
-            SectionDecideFrame.Size = UDim2.new(0, 0, 0, 2)
-            SectionDecideFrame.Name = "SectionDecideFrame"
-            SectionDecideFrame.Parent = Section
+    -- 5. Container Konten (Tempat menaruh Toggle/Dropdown)
+    local SectionAdd = Instance.new("Frame", Section)
+    SectionAdd.BackgroundTransparency = 1
+    SectionAdd.Position = UDim2.new(0, 0, 0, 38)
+    SectionAdd.Size = UDim2.new(1, 0, 0, 0)
+    SectionAdd.Name = "SectionAdd"
+    
+    local ListLayout = Instance.new("UIListLayout", SectionAdd)
+    ListLayout.Padding = UDim.new(0, 3)
 
-            UICorner1.Parent = SectionDecideFrame
+    -- 6. Logika Animasi
+    local OpenSection = (AlwaysOpen == true)
 
-            UIGradient.Color = ColorSequence.new {
-                ColorSequenceKeypoint.new(0, Color3.fromRGB(20, 20, 20)),
-                ColorSequenceKeypoint.new(0.5, GuiConfig.Color),
-                ColorSequenceKeypoint.new(1, Color3.fromRGB(20, 20, 20))
-            }
-            UIGradient.Parent = SectionDecideFrame
-
-            --// Section Add
-            local SectionAdd = Instance.new("Frame");
-            local UICorner8 = Instance.new("UICorner");
-            local UIListLayout2 = Instance.new("UIListLayout");
-
-            SectionAdd.AnchorPoint = Vector2.new(0.5, 0)
-            SectionAdd.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-            SectionAdd.BackgroundTransparency = 0.9990000128746033
-            SectionAdd.BorderColor3 = Color3.fromRGB(0, 0, 0)
-            SectionAdd.BorderSizePixel = 0
-            SectionAdd.ClipsDescendants = true
-            SectionAdd.LayoutOrder = 1
-            SectionAdd.Position = UDim2.new(0.5, 0, 0, 38)
-            SectionAdd.Size = UDim2.new(1, 0, 0, 100)
-            SectionAdd.Name = "SectionAdd"
-            SectionAdd.Parent = Section
-
-            UICorner8.CornerRadius = UDim.new(0, 2)
-            UICorner8.Parent = SectionAdd
-
-            UIListLayout2.Padding = UDim.new(0, 3)
-            UIListLayout2.SortOrder = Enum.SortOrder.LayoutOrder
-            UIListLayout2.Parent = SectionAdd
-
-            local OpenSection = false
-
-            local function UpdateSizeScroll()
-                local OffsetY = 0
-                for _, child in ScrolLayers:GetChildren() do
-                    if child.Name ~= "UIListLayout" then
-                        OffsetY = OffsetY + 3 + child.Size.Y.Offset
-                    end
-                end
-                ScrolLayers.CanvasSize = UDim2.new(0, 0, 0, OffsetY)
-            end
-
-            local function UpdateSizeSection()
-                if OpenSection then
-                    local SectionSizeYWitdh = 38
-                    for _, v in SectionAdd:GetChildren() do
-                        if v.Name ~= "UIListLayout" and v.Name ~= "UICorner" then
-                            SectionSizeYWitdh = SectionSizeYWitdh + v.Size.Y.Offset + 3
-                        end
-                    end
-                    TweenService:Create(FeatureFrame, TweenInfo.new(0.5), { Rotation = 90 }):Play()
-                    TweenService:Create(Section, TweenInfo.new(0.5), { Size = UDim2.new(1, 1, 0, SectionSizeYWitdh) })
-                        :Play()
-                    TweenService:Create(SectionAdd, TweenInfo.new(0.5),
-                        { Size = UDim2.new(1, 0, 0, SectionSizeYWitdh - 38) }):Play()
-                    TweenService:Create(SectionDecideFrame, TweenInfo.new(0.5), { Size = UDim2.new(1, 0, 0, 2) }):Play()
-                    task.wait(0.5)
-                    UpdateSizeScroll()
+    local function UpdateSize(animate)
+        local totalHeight = 38
+        if OpenSection then
+            for _, v in SectionAdd:GetChildren() do
+                if v:IsA("GuiObject") then
+                    totalHeight = totalHeight + v.Size.Y.Offset + 3
                 end
             end
+        end
 
-            if AlwaysOpen == true then
-                SectionButton:Destroy()
-                FeatureFrame:Destroy()
-                OpenSection = true
-                UpdateSizeSection()
-            elseif AlwaysOpen == false then
-                OpenSection = true
-                UpdateSizeSection()
-            else
-                OpenSection = false
-            end
+        local info = TweenInfo.new(animate and 0.3 or 0, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+        TweenService:Create(Section, info, {Size = UDim2.new(1, 0, 0, OpenSection and totalHeight or 35)}):Play()
+        TweenService:Create(FeatureImg, info, {Rotation = OpenSection and 0 or -90}):Play()
+    end
 
-            if AlwaysOpen ~= true then
-                SectionButton.Activated:Connect(function()
-                    CircleClick(SectionButton, Mouse.X, Mouse.Y)
-                    if OpenSection then
-                        TweenService:Create(FeatureFrame, TweenInfo.new(0.5), { Rotation = 0 }):Play()
-                        TweenService:Create(Section, TweenInfo.new(0.5), { Size = UDim2.new(1, 1, 0, 30) }):Play()
-                        TweenService:Create(SectionDecideFrame, TweenInfo.new(0.5), { Size = UDim2.new(0, 0, 0, 2) })
-                            :Play()
-                        OpenSection = false
-                        task.wait(0.5)
-                        UpdateSizeScroll()
-                    else
-                        OpenSection = true
-                        UpdateSizeSection()
-                    end
-                end)
-            end
+    -- 7. Event Listener
+    SectionButton.Activated:Connect(function()
+        if not AlwaysOpen then
+            OpenSection = not OpenSection
+            UpdateSize(true)
+        end
+    end)
 
-            if AlwaysOpen == true or AlwaysOpen == false then
-                OpenSection = true
-                local SectionSizeYWitdh = 38
-                for _, v in SectionAdd:GetChildren() do
-                    if v.Name ~= "UIListLayout" and v.Name ~= "UICorner" then
-                        SectionSizeYWitdh = SectionSizeYWitdh + v.Size.Y.Offset + 3
-                    end
-                end
-                FeatureFrame.Rotation = 90
-                Section.Size = UDim2.new(1, 1, 0, SectionSizeYWitdh)
-                SectionAdd.Size = UDim2.new(1, 0, 0, SectionSizeYWitdh - 38)
-                SectionDecideFrame.Size = UDim2.new(1, 0, 0, 2)
-                UpdateSizeScroll()
-            end
+    SectionAdd.ChildAdded:Connect(function() UpdateSize(true) end)
+    SectionAdd.ChildRemoved:Connect(function() UpdateSize(true) end)
 
-            SectionAdd.ChildAdded:Connect(UpdateSizeSection)
-            SectionAdd.ChildRemoved:Connect(UpdateSizeSection)
+    if AlwaysOpen then 
+        OpenSection = true 
+        UpdateSize(false)
+    end
 
             local layout = ScrolLayers:FindFirstChildOfClass("UIListLayout")
             if layout then
@@ -2794,8 +2597,6 @@ end)
         _G[safeName] = Sections
         return Sections
     end
-
-
 
     return Tabs
 end
