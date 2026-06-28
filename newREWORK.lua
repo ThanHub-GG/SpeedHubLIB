@@ -41,10 +41,18 @@ function UIAnimator:Tween(obj,time,style,direction,props)
     return tween
 end
 
-function UIAnimator:Fade(gui,transparency)
+function UIAnimator:Fade(gui, transparency)
+
+    local objects = {gui}
+
     for _,v in ipairs(gui:GetDescendants()) do
+        table.insert(objects,v)
+    end
+
+    for _,v in ipairs(objects) do
 
         if v:IsA("Frame") then
+
             self:Tween(v,.25,nil,nil,{
                 BackgroundTransparency = transparency
             })
@@ -607,11 +615,10 @@ function Chloex:Window(GuiConfig)
         Main.BackgroundTransparency = 0
     end
 
-    Main.AnchorPoint = Vector2.new(0.5, 0.5)
-    Main.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    Main.BorderSizePixel = 0
-    Main.Position = UDim2.new(0.5, 0, 0.5, 0)
-    Main.Size = UDim2.new(1, -47, 1, -47)
+    Main.AnchorPoint = Vector2.new(0.5,0.5)
+    Main.Position = UDim2.new(.5,0,.5,0)
+    Main.Size = UDim2.new(1,-47,1,-47)
+
     local MainScale = Instance.new("UIScale")
     MainScale.Scale = 0
     MainScale.Parent = Main
@@ -621,6 +628,40 @@ function Chloex:Window(GuiConfig)
     Main.Parent = DropShadow
 
     UICorner.Parent = Main
+
+--------------------------------------------------
+-- OPEN ANIMATION
+--------------------------------------------------
+
+task.defer(function()
+
+    Main.Visible = true
+
+    TweenService:Create(
+        MainScale,
+        TweenInfo.new(
+            0.45,
+            Enum.EasingStyle.Back,
+            Enum.EasingDirection.Out
+        ),
+        {
+            Scale = 1
+        }
+    ):Play()
+
+    TweenService:Create(
+        DropShadow,
+        TweenInfo.new(
+            0.35,
+            Enum.EasingStyle.Quint,
+            Enum.EasingDirection.Out
+        ),
+        {
+            ImageTransparency = 0.35
+        }
+    ):Play()
+
+end)
 
     Top.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
     Top.BackgroundTransparency = 0.9990000128746033
@@ -2754,20 +2795,7 @@ function Chloex:Window(GuiConfig)
         return Sections
     end
 
-task.wait(0.1)
 
-Main.Visible = true
-OpenScale.Scale = 0
-
-UIAnimator:Tween(
-    OpenScale,
-    0.45,
-    Enum.EasingStyle.Back,
-    Enum.EasingDirection.Out,
-    {
-        Scale = 1
-    }
-)
 
     return Tabs
 end
