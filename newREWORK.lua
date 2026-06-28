@@ -2754,23 +2754,20 @@ function Chloex:Window(GuiConfig)
         return Sections
     end
 
-task.defer(function()
+task.wait(0.1)
 
-    Main.Visible = true
+Main.Visible = true
+OpenScale.Scale = 0
 
-    UIAnimator:Tween(
-        OpenScale,
-        0.45,
-        Enum.EasingStyle.Back,
-        Enum.EasingDirection.Out,
-        {
-            Scale = 1
-        }
-    )
-
-    UIAnimator:Fade(Main, 0)
-
-end)
+UIAnimator:Tween(
+    OpenScale,
+    0.45,
+    Enum.EasingStyle.Back,
+    Enum.EasingDirection.Out,
+    {
+        Scale = 1
+    }
+)
 
     return Tabs
 end
